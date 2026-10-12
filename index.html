@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>pithfinder</title>
+<meta name="description" content="A crowd-sourced map for finding lemon, orange, lime, grapefruit and other citrus trees growing outdoors in London and across England. Spotted one? Add it.">
+<meta name="theme-color" content="#FF9F1A">
+<meta property="og:type" content="website">
+<meta property="og:title" content="pithfinder: citrus trees spotted outdoors">
+<meta property="og:description" content="Lemons, oranges, limes and grapefruit growing outdoors in London and beyond. Help map them.">
+<meta property="og:url" content="https://robertskylar.github.io/pithfinder/">
+<meta property="og:image" content="https://robertskylar.github.io/pithfinder/seed/chelsea-grapefruit.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='9.3' fill='%23FF9F1A'/%3E%3Ccircle cx='10' cy='10' r='7.4' fill='none' stroke='white' stroke-width='1.1'/%3E%3Cg stroke='white' stroke-width='1' stroke-linecap='round'%3E%3Cline x1='10' y1='10' x2='10' y2='3.3'/%3E%3Cline x1='10' y1='10' x2='15.8' y2='6.6'/%3E%3Cline x1='10' y1='10' x2='15.8' y2='13.4'/%3E%3Cline x1='10' y1='10' x2='10' y2='16.7'/%3E%3Cline x1='10' y1='10' x2='4.2' y2='13.4'/%3E%3Cline x1='10' y1='10' x2='4.2' y2='6.6'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@200;300;400;500;600;700;800;900&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF; --ink:#111111; --ink-2:#3C3C3C; --muted:#8A8A86; --rule:#E3E3E0; --rule-2:#C9C9C5; --tint:#F4F4F2; --sel:#FFF4E2;
+  --gf:#FF9F1A; --gf-ink:#111111; --leaf:#2F8A4A; --alert:#D1342F;
+  --m-sea:#E6EAEC; --m-land:#F4F4F2; --m-london:#F7F7F5; --m-park:#E3EADD; --m-wood:#DCE5D5; --m-cem:#E7EBE3; --m-water:#D9E3E8; --m-river:#C4D3DB;
+  --m-r1:#9C9C98; --m-r2:#ABABA7; --m-r3:#B9B9B5; --m-r4:#C8C8C4; --m-r5:#D6D6D2; --m-minor:#FFFFFF; --m-minor-low:#DFDFDB; --m-casing:#D5D5D0;
+  --m-rail:#C0C0BB; --m-borough:#B8B8B3; --m-grid:rgba(17,17,17,.07); --m-label:#161616; --m-label-2:#7A7A76; --m-halo:#F6F6F4; --m-park-label:#6E8A63; --m-margin:rgba(255,255,255,.92);
+  --font:"Hanken Grotesk","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0B0B0B; --ink:#F1F1EF; --ink-2:#CFCFCB; --muted:#8E8E89; --rule:#262626; --rule-2:#3A3A3A; --tint:#161616; --sel:#2A2114;
+    --gf:#FFAE3D; --leaf:#6CC487; --alert:#FF7A72;
+    --m-sea:#0E1214; --m-land:#151515; --m-london:#181818; --m-park:#18201A; --m-wood:#1A231C; --m-cem:#1B1F1B; --m-water:#132027; --m-river:#1B2E38;
+    --m-r1:#5E5E5B; --m-r2:#535350; --m-r3:#4A4A47; --m-r4:#40403E; --m-r5:#363634; --m-minor:#2C2C2B; --m-minor-low:#262625; --m-casing:#0A0A0A;
+    --m-rail:#3E3E3C; --m-borough:#46464A; --m-grid:rgba(241,241,239,.06); --m-label:#ECECEA; --m-label-2:#8E8E89; --m-halo:#151515; --m-park-label:#7FA073; --m-margin:rgba(11,11,11,.9);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0B0B0B; --ink:#F1F1EF; --ink-2:#CFCFCB; --muted:#8E8E89; --rule:#262626; --rule-2:#3A3A3A; --tint:#161616; --sel:#2A2114;
+  --gf:#FFAE3D; --leaf:#6CC487; --alert:#FF7A72;
+  --m-sea:#0E1214; --m-land:#151515; --m-london:#181818; --m-park:#18201A; --m-wood:#1A231C; --m-cem:#1B1F1B; --m-water:#132027; --m-river:#1B2E38;
+  --m-r1:#5E5E5B; --m-r2:#535350; --m-r3:#4A4A47; --m-r4:#40403E; --m-r5:#363634; --m-minor:#2C2C2B; --m-minor-low:#262625; --m-casing:#0A0A0A;
+  --m-rail:#3E3E3C; --m-borough:#46464A; --m-grid:rgba(241,241,239,.06); --m-label:#ECECEA; --m-label-2:#8E8E89; --m-halo:#151515; --m-park-label:#7FA073; --m-margin:rgba(11,11,11,.9);
+}
+[hidden]{display:none!important}
+html,body{margin:0}
+img{max-width:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{transition:none!important;animation:none!important} }
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.4;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+a{color:inherit}
+
+.wrap{padding-inline:clamp(16px,3.4vw,44px);max-width:1640px;margin:0 auto}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px 6px}
+.wm{display:flex;align-items:center;gap:7px;font-weight:800;font-size:clamp(26px,3vw,34px);letter-spacing:-.055em;line-height:1;text-decoration:none}
+.wm svg{width:.72em;height:.72em;transform:translateY(-.32em)}
+nav.links{display:flex;gap:clamp(16px,3vw,40px);font-weight:700;font-size:15px}
+nav.links a,nav.links button{background:none;border:0;padding:0;cursor:pointer;text-decoration:none;font-weight:700}
+nav.links a:hover,nav.links button:hover{text-decoration:underline;text-underline-offset:3px}
+
+.hero{padding-block:6px 22px}
+.hero h1{font-weight:300;font-size:clamp(46px,7.4vw,112px);line-height:.95;letter-spacing:-.045em;margin:0;text-wrap:balance}
+.hero h1 span{color:var(--muted)}
+.hero p{margin:16px 0 0;max-width:56ch;font-size:16px;color:var(--ink-2)}
+
+.stage{display:grid;grid-template-columns:minmax(0,1fr) clamp(320px,30vw,430px);gap:clamp(16px,2.4vw,36px);align-items:start}
+.mapwrap{position:relative;height:min(76vh,860px);min-height:420px;background:var(--m-sea);overflow:hidden}
+#mapcv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#mapsvg{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+#mapsvg:active{cursor:grabbing}
+.picking #mapsvg{cursor:crosshair}
+.spec{position:sticky;top:14px;display:grid;align-content:start}
+
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-top:1px solid var(--rule);padding:9px 0 10px}
+.row .v{font-weight:700;font-size:14.5px;min-width:0}
+.row .k{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex:none;text-align:right}
+.row .v.big{font-weight:300;font-size:30px;letter-spacing:-.03em;line-height:1}
+.bar{height:22px;background:var(--tint);display:flex;align-items:flex-end}
+.bar i{height:5px;display:block}
+.cta{display:flex;justify-content:space-between;align-items:center;width:100%;background:var(--gf);color:var(--gf-ink);border:0;padding:14px 14px;font-weight:700;font-size:15px;cursor:pointer;text-align:left;margin-top:14px}
+.cta:hover{filter:brightness(1.05)}
+.cta small{font-weight:600;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.fine{font-size:12.5px;color:var(--muted);margin-top:10px}
+.key{display:grid;border-top:1px solid var(--rule)}
+.kitem{display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:center;background:none;border:0;border-bottom:1px solid var(--rule);padding:7px 0;cursor:pointer;text-align:left;font-size:14px;font-weight:500}
+.kitem:hover{background:var(--tint)}
+.kitem .sw{width:10px;height:10px;border-radius:50%}
+.kitem .n{font-variant-numeric:tabular-nums;font-weight:700}
+.kitem[aria-pressed="false"]{opacity:.32}
+.keyhead{display:flex;justify-content:space-between;align-items:baseline;margin-top:18px;padding-bottom:6px}
+.keyhead b{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.keyhead button{font-size:12.5px;font-weight:700;background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+
+/* tree spec */
+.back{justify-self:start;background:none;border:0;padding:0 0 10px;font-weight:700;cursor:pointer}
+.back:hover{text-decoration:underline;text-underline-offset:3px}
+.photo{aspect-ratio:4/3;max-width:100%;background:var(--tint);display:grid;place-items:center;overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo svg{width:30%;height:30%}
+.credit{font-size:11.5px;color:var(--muted);padding:6px 0 0}
+.ttl{font-weight:300;font-size:clamp(30px,2.6vw,40px);line-height:1;letter-spacing:-.04em;margin:16px 0 14px;text-wrap:balance}
+.desc{font-size:14px;line-height:1.5;color:var(--ink-2);border-top:1px solid var(--rule);padding:10px 0 12px;margin:0}
+.sw-inline{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:0}
+.yes{color:var(--leaf)}
+.links2{display:flex;flex-wrap:wrap;gap:6px 18px;border-top:1px solid var(--rule);padding-top:10px;font-weight:700;font-size:14px}
+.links2 button,.links2 a{background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-weight:700}
+.links2 .danger{color:var(--alert)}
+.approx{font-weight:500;color:var(--muted)}
+
+/* map chrome */
+.mapctl{position:absolute;top:28px;right:8px;display:flex;flex-direction:column;gap:6px;align-items:flex-end;z-index:2}
+.seg{display:flex;background:var(--bg);border:1px solid var(--rule-2)}
+.seg button{border:0;background:var(--bg);min-width:32px;height:30px;padding:0 10px;cursor:pointer;font-weight:700;font-size:13px}
+.seg button+button{border-left:1px solid var(--rule-2)}
+.seg.v{flex-direction:column}.seg.v button+button{border-left:0;border-top:1px solid var(--rule-2)}
+.seg button:hover{background:var(--tint)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.scale{position:absolute;left:28px;bottom:10px;font:600 10.5px var(--font);letter-spacing:.04em;color:var(--m-label);z-index:2;pointer-events:none}
+.scale i{display:block;height:5px;border:1px solid var(--m-label);border-top:0;margin-top:2px}
+.attr{position:absolute;right:6px;bottom:5px;font-size:10px;color:var(--m-label-2);z-index:2;background:var(--m-margin);padding:1px 5px}
+.pickbar{position:absolute;left:28px;right:56px;top:28px;display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--gf);color:var(--gf-ink);padding:9px 12px;z-index:3;max-width:480px;font-weight:700}
+.pickbar button{background:none;border:0;font-weight:700;text-decoration:underline;cursor:pointer;padding:0}
+.peek{position:absolute;left:8px;right:8px;bottom:26px;display:flex;gap:10px;align-items:center;background:var(--bg);border:1px solid var(--rule-2);padding:8px;cursor:pointer;text-align:left;z-index:3}
+.peek img,.peek .ph{width:44px;height:44px;object-fit:cover;flex:none}
+.pin{cursor:pointer}
+.pin .disc{stroke:var(--bg);stroke-width:2}
+.pin .seg-l{stroke:#fff;stroke-width:1.1;stroke-linecap:round;pointer-events:none}
+.pin .ring{fill:none;stroke:var(--ink);stroke-width:1.6}
+.cluster{cursor:pointer}
+.cluster circle{fill:var(--ink)}
+.cluster text{font:700 11.5px var(--font);fill:var(--bg);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.draft .disc{fill:var(--bg);stroke:var(--gf);stroke-width:3}
+.draft .cross{stroke:var(--gf);stroke-width:2}
+.me .acc{fill:rgba(47,123,246,.13);stroke:rgba(47,123,246,.45);stroke-width:1}
+.me .dot{fill:#2F7BF6;stroke:#fff;stroke-width:2.5}
+.me{pointer-events:none}
+
+/* index */
+.index-sec{padding-block:clamp(40px,6vw,80px) 20px}
+.index-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:14px}
+.index-head h2{font-weight:300;font-size:clamp(36px,4.6vw,64px);letter-spacing:-.045em;line-height:.95;margin:0}
+.search{width:min(360px,100%);border:0;border-bottom:1.5px solid var(--ink);background:transparent;padding:6px 0;font-weight:500;font-size:15px;border-radius:0}
+.search:focus{outline:none;border-bottom-color:var(--gf)}
+.areas{display:flex;flex-wrap:wrap;gap:6px 16px;margin:-4px 0 10px;font-weight:700;font-size:14px}
+.areas button{background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-weight:700}
+table.idx{width:100%;border-collapse:collapse;font-size:14px}
+.idx th{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--ink)}
+.idx td{padding:11px 10px 11px 0;border-bottom:1px solid var(--rule);vertical-align:baseline}
+.idx tbody tr{cursor:pointer}
+.idx tbody tr:hover{background:var(--tint)}
+.idx tbody tr.sel{background:var(--sel)}
+.idx .code{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.idx .pl{font-weight:700}
+.idx .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.idx .m{color:var(--muted)}
+.tblwrap{overflow-x:auto}
+.note{margin:0 0 12px;padding:9px 12px;background:var(--tint);font-size:13px;color:var(--ink-2)}
+footer{border-top:1px solid var(--rule);margin-top:40px;padding-block:18px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px 32px;font-size:12.5px;color:var(--muted)}
+
+/* sheet */
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.42);display:flex;justify-content:flex-end;z-index:50}
+.drawer{background:var(--bg);color:var(--ink);width:min(560px,100%);height:100%;overflow-y:auto;padding:0 clamp(16px,2.4vw,28px) 28px}
+.drawer header{display:flex;justify-content:space-between;align-items:center;padding:18px 0 4px;position:sticky;top:0;background:var(--bg);z-index:2}
+.drawer h3{font-weight:300;font-size:40px;letter-spacing:-.045em;margin:0;line-height:1}
+.drawer header button{background:none;border:0;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:0}
+form.add{display:grid;gap:0;margin-top:14px}
+.f{border-top:1px solid var(--rule);padding:12px 0 14px;display:grid;gap:8px}
+.f .lab{display:flex;justify-content:space-between;align-items:baseline;font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.f .lab em{font-style:normal;text-transform:none;letter-spacing:0;font-size:12px}
+.f input[type=text],.f input[type=date],.f textarea{width:100%;border:0;border-bottom:1px solid var(--rule-2);background:transparent;padding:6px 0;font-weight:600;font-size:15px;border-radius:0}
+.f input:focus,.f textarea:focus{outline:none;border-bottom-color:var(--ink)}
+.f textarea{min-height:64px;resize:vertical;font-weight:500}
+.drop{position:relative;display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;cursor:pointer;padding:4px 0}
+.drop.over{background:var(--sel)}
+.drop .prev{width:84px;height:84px;background:var(--tint);overflow:hidden;display:grid;place-items:center}
+.drop .prev img{width:100%;height:100%;object-fit:cover}
+.drop input{position:absolute;width:1px;height:1px;opacity:0}
+.drop strong{text-decoration:underline;text-underline-offset:3px}
+.hint{font-size:12.5px;color:var(--muted)}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts label{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--rule-2);padding:5px 10px;font-size:14px;font-weight:600;cursor:pointer}
+.opts input{position:absolute;opacity:0;width:1px;height:1px}
+.opts label:has(input:checked){background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.opts label:has(input:focus-visible){outline:2px solid var(--ink);outline-offset:2px}
+.opts .sw{width:9px;height:9px;border-radius:50%}
+.locrow{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.locrow input{flex:1;min-width:200px}
+.linkbtn{background:none;border:0;padding:0;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.locstate{font-size:14px;font-weight:600}
+.locstate.ok{color:var(--leaf)}
+.err{color:var(--alert);font-size:14px;font-weight:700;min-height:1px}
+.copybox{width:100%;min-height:170px;font:500 13px var(--font);border:1px solid var(--rule-2);padding:10px;background:var(--bg)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;font-weight:700;font-size:14px;z-index:60;max-width:calc(100% - 32px)}
+
+@media (max-width:900px){
+  .stage{grid-template-columns:1fr}
+  .mapwrap{height:64svh;min-height:380px;margin-inline:calc(-1 * clamp(16px,3.4vw,44px))}
+  .spec{position:static}
+  .idx .hide-m{display:none}
+}
+@media (min-width:901px){ .peek{display:none} }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="app">
+  <header class="top">
+    <a class="wm" href="#top" aria-label="pithfinder home">pithfinder<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9.3" fill="var(--gf)"/><circle cx="10" cy="10" r="7.4" fill="none" stroke="#fff" stroke-width="1.1"/><g stroke="#fff" stroke-width="1" stroke-linecap="round"><line x1="10" y1="10" x2="10" y2="3.3"/><line x1="10" y1="10" x2="15.8" y2="6.6"/><line x1="10" y1="10" x2="15.8" y2="13.4"/><line x1="10" y1="10" x2="10" y2="16.7"/><line x1="10" y1="10" x2="4.2" y2="13.4"/><line x1="10" y1="10" x2="4.2" y2="6.6"/></g></svg></a>
+    <nav class="links"><a href="#index">Index</a><button type="button" id="addTop">Add a tree</button></nav>
+  </header>
+
+  <section class="hero" id="top">
+    <h1>Citrus Trees <span>Spotted Outdoors</span></h1>
+    <p>Lemons, oranges, limes and grapefruit are quietly getting through winters outdoors in London and beyond. Nobody knows how many there are, so this map only knows what people add. Spotted one in a park, a front garden or your own back garden? Put it on the map.</p>
+  </section>
+
+  <div class="stage">
+    <div class="mapwrap" id="mapwrap">
+      <canvas id="mapcv" aria-hidden="true"></canvas>
+      <svg id="mapsvg" role="img" aria-label="Street map of citrus trees"></svg>
+      <div class="mapctl">
+        <div class="seg v"><button type="button" id="zin" aria-label="Zoom in">+</button><button type="button" id="zout" aria-label="Zoom out">−</button></div>
+        <div class="seg"><button type="button" id="vLondon" aria-pressed="true">London</button><button type="button" id="vUK" aria-pressed="false">UK</button></div>
+        <div class="seg"><button type="button" id="locate" aria-pressed="false" aria-label="Show my location"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="vertical-align:-2px;margin-right:5px"><circle cx="8" cy="8" r="3" fill="currentColor"/><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 0v2.5M8 13.5V16M0 8h2.5M13.5 8H16" stroke="currentColor" stroke-width="1.5"/></svg>Locate me</button></div>
+      </div>
+      <div class="scale" id="scale"></div>
+      <div class="attr">© OpenStreetMap contributors</div>
+      <div class="pickbar" id="pickbar" hidden><span>Tap the spot where the tree is.</span><button type="button" id="pickCancel">Cancel</button></div>
+      <button class="peek" id="peek" type="button" hidden></button>
+    </div>
+
+    <aside class="spec" id="spec" aria-live="polite">
+      <div id="overview">
+        <div class="row"><span class="v big" id="tTrees">–</span><span class="k">Spotted so far</span></div>
+        <div class="row"><span class="v big" id="tKinds">–</span><span class="k">Kinds of citrus</span></div>
+        <div class="row"><span class="v" id="tFruit">–</span><span class="k">Seen fruiting</span></div>
+        <div class="row"><span class="v" id="tRegions">–</span><span class="k">Regions</span></div>
+        <div class="bar" id="mixBar" aria-hidden="true"></div>
+        <div class="keyhead"><b>Key</b><button type="button" id="showAll" hidden>Show all</button></div>
+        <div class="key" id="key" role="group" aria-label="Filter by kind of citrus"></div>
+        <button class="cta" type="button" id="addBtn"><span>Add a tree</span><small>Photo · Pin · Done</small></button>
+        <div class="fine">Any tree counts, including ones in back gardens. For private gardens, keep the pin at street level and leave out house numbers.</div>
+      </div>
+      <div id="detail" hidden></div>
+    </aside>
+  </div>
+
+  <section class="index-sec" id="index">
+    <div class="index-head">
+      <h2>Index</h2>
+      <input class="search" id="q" type="search" placeholder="Search trees, streets, areas" aria-label="Search">
+    </div>
+    <div class="areas" id="areas" hidden></div>
+    <div id="modeNote"></div>
+    <div class="tblwrap">
+      <table class="idx">
+        <thead><tr><th>Code</th><th>Place</th><th>Kind</th><th class="hide-m">Fruit</th><th class="hide-m">Seen</th><th>Grid / area</th></tr></thead>
+        <tbody id="list"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <div>Starter records from <a href="https://www.homecitrusgrowers.co.uk/citrusplaces/londonoutdoorcitrus.html" target="_blank" rel="noopener">Home Citrus Growers</a>, <a href="https://thestreettree.substack.com/p/99-shoreditch-lemon" target="_blank" rel="noopener">The Street Tree</a> and Wandsworth Council. Trees in private gardens are placed at street level.</div>
+    <div>Map data © OpenStreetMap contributors (ODbL), land polygons from osmdata.openstreetmap.de. Boroughs: ONS (OGL). Coastline: Natural Earth.</div>
+    <div>No cookies and no tracking. Your location is only used on your device to show you on the map, and is only saved if you add a tree there. Trees you add are public.</div>
+  </footer>
+</div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <header><h3 id="sheetTitle">Add a tree</h3><button type="button" id="closeSheet">Close</button></header>
+    <div id="sheetBody">
+            <form class="add" id="addForm" novalidate>
+        <div class="f">
+          <span class="lab">Photo</span>
+          <label class="drop" id="drop" for="fPhoto"><span class="prev" id="prev"></span><span><strong>Choose a photo</strong><br><span class="hint" id="photoHint"></span></span><input type="file" id="fPhoto" accept="image/*"></label>
+        </div>
+        <div class="f"><span class="lab">Kind</span><div class="opts" id="fSpecies"></div></div>
+        <div class="f"><label class="lab" for="fPlace">Street and area <em>No house numbers, please</em></label><input type="text" id="fPlace" maxlength="120" placeholder="Rivington Street, Shoreditch"></div>
+        <div class="f">
+          <span class="lab">Pin</span>
+          <div class="locstate" id="locState">No location yet.</div>
+          <div class="locrow"><button class="linkbtn" type="button" id="hereBtn">Use where I'm standing</button><span class="hint">or</span><button class="linkbtn" type="button" id="pickBtn">Pick on the map</button></div>
+          <div class="locrow"><span class="hint">or</span><input type="text" id="fCoords" placeholder="Paste a Google Maps link or 51.5072, -0.1276" aria-label="Google Maps link or coordinates" style="border:0;border-bottom:1px solid var(--rule-2);background:transparent;padding:6px 0;font-weight:600"><button class="linkbtn" type="button" id="useCoords">Use</button></div>
+        </div>
+        <div class="f"><label class="lab" for="fVariety">Variety <em>Optional</em></label><input type="text" id="fVariety" maxlength="80" placeholder="Star Ruby, Meyer, Seville…"></div>
+        <div class="f"><label class="lab" for="fSeen">Date seen</label><input type="date" id="fSeen"></div>
+        <div class="f"><span class="lab">Where is it growing? <em>Private space = courtyards, offices, schools, anywhere not open to the public</em></span><div class="opts" id="fSetting"></div></div>
+        <div class="f"><span class="lab">Fruit</span><div class="opts" id="fFruit"></div></div>
+        <div class="f"><label class="lab" for="fNotes">Notes <em>Optional</em></label><textarea id="fNotes" maxlength="600" placeholder="Size, how sheltered it is, whether it gets covered in winter"></textarea></div>
+        <div class="err" id="formErr" aria-live="polite"></div>
+        <button class="cta" type="submit" id="submitAdd"><span>Add to the map</span><small>Saves for everyone</small></button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/lite.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+<script>
+(function(){
+const SPECIES = [
+  {k:'lemon', n:'Lemon', l:'Citrus × limon', c:'#F1C40F', code:'LM'},
+  {k:'orange', n:'Orange', l:'Citrus × sinensis', c:'#F28A1E', code:'OR'},
+  {k:'mandarin', n:'Mandarin', l:'Citrus reticulata', c:'#D9581E', code:'MD'},
+  {k:'grapefruit', n:'Grapefruit', l:'Citrus × paradisi', c:'#EE5466', code:'GF'},
+  {k:'pomelo', n:'Pomelo', l:'Citrus maxima', c:'#B4C33A', code:'PM'},
+  {k:'lime', n:'Lime', l:'Citrus × aurantiifolia', c:'#4E9E3A', code:'LI'},
+  {k:'other', n:'Other citrus', l:'Citrus spp.', c:'#A46DC0', code:'OC'},
+  {k:'hardy', n:'Hardy hybrid', l:'Citrus trifoliata and hybrids', c:'#2F7D69', code:'HY'},
+  {k:'unknown', n:'Not sure yet', l:'Citrus sp.', c:'#9A968D', code:'XX'}
+];
+const SP = Object.fromEntries(SPECIES.map(s=>[s.k,s]));
+const SETTINGS = {front:'Front garden', back:'Back garden', public:'Public space', garden:'Park or public garden', private:'Private space', pot:'Big pot, outdoors', other:'Somewhere else'};
+const SETTING_LABEL = {...SETTINGS, wall:'Against a wall'};
+const FRUIT = {yes:'Fruiting', flowers:'Flowering', no:'No fruit seen', unknown:'Not sure'};
+const UKB = {lat:[49.8,61], lng:[-8.7,2.1]};
+const GRID = {lon0:-0.52, lon1:0.34, lat0:51.70, lat1:51.27, cols:12, rows:9, letters:'ABCDEFGHJKLM'};
+const FONT = '"Hanken Grotesk","Helvetica Neue",Helvetica,Arial,sans-serif';
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const narrow = () => matchMedia('(max-width: 900px)').matches;
+const dur = ms => reduceMotion ? 0 : ms;
+const smooth = () => reduceMotion ? 'auto' : 'smooth';
+
+const state = {trees:[], filter:new Set(), q:'', sel:null, mode:'loading', me:null, canWrite:null, canEdit:false, num:new Map()};
+const SUPABASE_URL = 'https://prxcmdvrvsvaqyefxeyo.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_XcB2e2sYuNd1uA3RtMTSDA_QCUy6cLd';
+const PHOTO_BASE = SUPABASE_URL + '/storage/v1/object/public/photos/';
+const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:false, autoRefreshToken:false}}) : null;
+
+function sliceSVG(color, size){
+  const r=size/2, rays=[];
+  for (let i=0;i<10;i++){ const a=i*Math.PI/5; rays.push(`<line x1="${r}" y1="${r}" x2="${(r+Math.cos(a)*r*.72).toFixed(1)}" y2="${(r+Math.sin(a)*r*.72).toFixed(1)}"/>`); }
+  return `<svg viewBox="0 0 ${size} ${size}" aria-hidden="true"><circle cx="${r}" cy="${r}" r="${r-1}" fill="${color}"/><circle cx="${r}" cy="${r}" r="${r*.8}" fill="none" stroke="#fff" stroke-width="${size/40}"/><g stroke="#fff" stroke-width="${size/45}" stroke-linecap="round">${rays.join('')}</g></svg>`;
+}
+function fmtDate(s){ if(!s) return '—'; const d=new Date(s+'T12:00:00'); return isNaN(d)?'—':d.toLocaleDateString('en-GB',{month:'short',year:'numeric'}); }
+function safeImg(u){ return typeof u==='string' && (/^data:image\/(jpeg|png|webp);base64,/.test(u) || /^seed\/[\w.-]+$/.test(u) || (u.startsWith(PHOTO_BASE) && /^[\w\/.-]+$/.test(u.slice(PHOTO_BASE.length)))) ? u : null; }
+function safeUrl(u){ return typeof u==='string' && /^https:\/\//.test(u) ? u : null; }
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true,3200); }
+function gridRef(lat,lng){
+  const c=Math.floor((lng-GRID.lon0)/(GRID.lon1-GRID.lon0)*GRID.cols), r=Math.floor((GRID.lat0-lat)/(GRID.lat0-GRID.lat1)*GRID.rows);
+  return (c<0||c>=GRID.cols||r<0||r>=GRID.rows) ? null : GRID.letters[c]+(r+1);
+}
+const codeOf = t => `${SP[t.species].code}-${state.num.get(t.id)||'000'}`;
+function norm(d){ const t={...d}; t.species = SP[t.species] ? t.species : 'unknown'; t.lat=+t.lat; t.lng=+t.lng; return t; }
+
+/* =================== MAP ENGINE =================== */
+const R2D = Math.PI/180;
+let S=1, TX=0, TY=0, baseMpp=60;
+const COS=Math.cos(51.5*R2D);
+const px = lon => S*lon*R2D + TX;
+const py = lat => TY - S*Math.log(Math.tan(Math.PI/4 + lat*R2D/2));
+const unpx = x => (x-TX)/S/R2D;
+const unpy = y => (2*Math.atan(Math.exp((TY-y)/S)) - Math.PI/2)/R2D;
+let cv, ctx, cssW=0, cssH=0, dpr=1, svg, gPins, zoom, T=d3.zoomIdentity, raf=0, draft=null;
+const MAP = {ready:false, cells:new Map(), labels:[], boroughs:[], leaves:{m:[], d:[]}, loaded:new Set(), loading:new Set(), uk:[], areaIndex:null};
+const MIDZ = 9.5, DETZ = 11.4;
+const COL = {};
+const Zof = k => Math.log2(156543.03*COS/(baseMpp/k));
+const kOf = Z => baseMpp/(156543.03*COS/Math.pow(2,Z));
+function stops(Z, s){ const ks=Object.keys(s).map(Number); if (Z<=ks[0]) return s[ks[0]]; for (let i=1;i<ks.length;i++){ if (Z<=ks[i]){ const t=(Z-ks[i-1])/(ks[i]-ks[i-1]); return s[ks[i-1]]+(s[ks[i]]-s[ks[i-1]])*t; } } return s[ks[ks.length-1]]; }
+function readColors(){
+  const cs = getComputedStyle(document.documentElement);
+  for (const k of ['sea','land','london','park','wood','cem','water','river','r1','r2','r3','r4','r5','minor','minor-low','casing','rail','borough','grid','label','label-2','halo','park-label','margin'])
+    COL[k] = cs.getPropertyValue('--m-'+k).trim();
+  COL.ink = cs.getPropertyValue('--ink').trim(); COL.gf = cs.getPropertyValue('--gf').trim();
+}
+function getCell(key){ let c=MAP.cells.get(key); if (!c){ c={lines:{}, polys:{}, streets:[], labels:[], bb:[Infinity,Infinity,-Infinity,-Infinity], layer:'b'}; MAP.cells.set(key,c); } return c; }
+function grow(bb,x,y){ if(x<bb[0])bb[0]=x; if(y<bb[1])bb[1]=y; if(x>bb[2])bb[2]=x; if(y>bb[3])bb[3]=y; }
+function decodePts(a){ const out=new Float32Array(a.length); let X=0,Y=0; for(let i=0;i<a.length;i+=2){ X+=a[i]; Y+=a[i+1]; out[i]=px(X/1e5); out[i+1]=py(Y/1e5); } return out; }
+function addToPath(p, pts, close){ p.moveTo(pts[0],pts[1]); for(let i=2;i<pts.length;i+=2) p.lineTo(pts[i],pts[i+1]); if (close) p.closePath(); }
+function cellKeyFor(a){ return Math.floor(a[0]/25000)+'_'+Math.floor(a[1]/16000); }
+function addStreet(cell, name, cls, pts){
+  let best=0, bi=0;
+  for (let i=0;i<pts.length-2;i+=2){ const d=Math.hypot(pts[i+2]-pts[i], pts[i+3]-pts[i+1]); if (d>best){best=d; bi=i;} }
+  cell.streets.push({name, cls, ax:pts[bi], ay:pts[bi+1], bx:pts[bi+2], by:pts[bi+3], len:best});
+}
+function ingest(data){
+  const names = data.names;
+  for (const [cls, ni, enc] of data.lines){
+    const cell = getCell('b'+cellKeyFor(enc)), pts = decodePts(enc);
+    addToPath(cell.lines[cls] || (cell.lines[cls] = new Path2D()), pts, false);
+    for (let i=0;i<pts.length;i+=2) grow(cell.bb, pts[i], pts[i+1]);
+  }
+  for (const [cls, ni, ...rings] of data.polys){
+    const cell = getCell('b'+cellKeyFor(rings[0]));
+    const p = cell.polys[cls] || (cell.polys[cls] = new Path2D());
+    for (const r of rings){ const pts=decodePts(r); addToPath(p, pts, true); for (let i=0;i<pts.length;i+=2) grow(cell.bb, pts[i], pts[i+1]); }
+  }
+  for (const [cls, ni, x, y] of data.labels) MAP.labels.push({cls, name:names[ni], x:px(x/1e5), y:py(y/1e5), lat:y/1e5, lng:x/1e5});
+}
+// Regional and street tiles: names, then lines, polygons and labels as zigzag varint deltas from the tile corner.
+function decodeBin(buf, leaf){
+  const u=new Uint8Array(buf); let p=0;
+  const vu=()=>{ let r=0, m=1, b; do { b=u[p++]; r+=(b&127)*m; m*=128; } while (b&128); return r; };
+  const vs=()=>{ const n=vu(); return n%2 ? -(n+1)/2 : n/2; };
+  const td=new TextDecoder(), names=[];
+  for (let i=vu(); i>0; i--){ const L=vu(); names.push(td.decode(u.subarray(p,p+L))); p+=L; }
+  const cell=getCell(leaf.layer+leaf.id); cell.layer=leaf.layer;
+  const ox=leaf.X0, oy=leaf.Y0;
+  const pts=n=>{ const out=new Float32Array(n*2); let X=ox, Y=oy; for (let i=0;i<n;i++){ X+=vs(); Y+=vs(); const x=px(X/1e5), y=py(Y/1e5); out[2*i]=x; out[2*i+1]=y; grow(cell.bb,x,y); } return out; };
+  for (let i=vu(); i>0; i--){
+    const cls=vu(), ni=vu()-1, n=vu(), a=pts(n);
+    addToPath(cell.lines[cls] || (cell.lines[cls]=new Path2D()), a, false);
+    if (ni>=0 && cls<=7 && n>=2) addStreet(cell, names[ni], cls, a);
+  }
+  for (let i=vu(); i>0; i--){
+    const cls=vu(); vu(); const nr=vu(), path=cell.polys[cls] || (cell.polys[cls]=new Path2D());
+    for (let r=0;r<nr;r++) addToPath(path, pts(vu()), true);
+  }
+  for (let i=vu(); i>0; i--){ const cls=vu(), ni=vu()-1, X=ox+vs(), Y=oy+vs(); cell.labels.push({cls, name:names[ni], x:px(X/1e5), y:py(Y/1e5)}); }
+  grow(cell.bb, leaf.bb[0], leaf.bb[1]); grow(cell.bb, leaf.bb[2], leaf.bb[3]);
+}
+async function loadGaz(){
+  if (loadGaz.p) return loadGaz.p;
+  return loadGaz.p = fetch('map/places.json').then(r=>r.json()).then(g=>{
+    MAP.areaIndex = g.map(([name,x,y,cls])=>({name, lat:y/1e5, lng:x/1e5, cls})).concat(MAP.boroughs.map(b=>({name:b.name, lat:unpy(b.y), lng:unpx(b.x), cls:1})));
+  }).catch(()=>{ MAP.areaIndex = MAP.labels.map(l=>({name:l.name, lat:l.lat, lng:l.lng, cls:l.cls})); });
+}
+function nearTown(lat, lng){
+  let best=null, bd=Infinity; const c=Math.cos(lat*R2D);
+  for (const l of MAP.labels){ if (l.cls>1) continue; const d=(l.lat-lat)**2+((l.lng-lng)*c)**2; if (d<bd){ bd=d; best=l.name; } }
+  return best;
+}
+async function initMap(){
+  cv=$('#mapcv'); ctx=cv.getContext('2d'); svg=d3.select('#mapsvg');
+  readColors();
+  const base = await fetch('map/england.json').then(r=>r.json());
+  const box = $('#mapwrap').getBoundingClientRect();
+  const W=Math.max(box.width,300), H=Math.max(box.height,300);
+  const london = {type:'Polygon', coordinates: base.london.map(r=>{ const o=[]; let X=0,Y=0; for(let i=0;i<r.length;i+=2){X+=r[i];Y+=r[i+1];o.push([X/1e5,Y/1e5]);} return o; })};
+  const proj = d3.geoMercator().fitExtent([[30,36],[W-30,H-20]], london);
+  S=proj.scale(); [TX,TY]=proj.translate(); baseMpp=6378137*COS/S;
+  MAP.landPath=new Path2D(); for (const poly of base.land) for (const r of poly) addToPath(MAP.landPath, decodePts(r), true);
+  MAP.londonPath=new Path2D(); for (const r of base.london) addToPath(MAP.londonPath, decodePts(r), true);
+  MAP.boroughPath=new Path2D();
+  for (const [ni, ...rings] of base.boroughs){
+    let big=null;
+    for (const r of rings){ const pts=decodePts(r); addToPath(MAP.boroughPath, pts, true); if (!big || pts.length>big.length) big=pts; }
+    const arr=[]; for (let i=0;i<big.length;i+=2) arr.push([big[i],big[i+1]]);
+    const [cx,cy]=d3.polygonCentroid(arr); MAP.boroughs.push({name:base.names[ni], x:cx, y:cy});
+  }
+  ingest(base);
+  MAP.uk = base.uk.map(([r,name,x,y])=>({r, name, x:px(x/1e5), y:py(y/1e5)}));
+  for (const [layer, rows] of [['m', base.mid||[]], ['d', base.det||[]]])
+    MAP.leaves[layer] = rows.map(([id,X0,Y0,X1,Y1,flag])=>({id, layer, X0, Y0, flag, bb:[px(X0/1e5), py(Y1/1e5), px(X1/1e5), py(Y0/1e5)]}));
+  MAP.ready=true;
+  zoom = d3.zoom().scaleExtent([kOf(5.2), kOf(18.6)]).filter(ev => (!ev.ctrlKey || ev.type==='wheel') && !ev.button && (ev.type!=='wheel' || ev.ctrlKey || ev.metaKey || mapFocused))
+    .on('zoom', ev => { T=ev.transform; schedule(); drawPins(); syncView(); });
+  svg.call(zoom);
+  svg.on('click.pick', ev => {
+    mapFocused = true;
+    if (!picking) return;
+    const [mx,my]=d3.pointer(ev, svg.node()), [bx,by]=T.invert([mx,my]);
+    setDraft(unpy(by), unpx(bx), 'Placed on the map'); endPick(true);
+  });
+  $('#mapwrap').addEventListener('pointerdown', () => { mapFocused = true; });
+  document.addEventListener('pointerdown', e => { if (!$('#mapwrap').contains(e.target)) mapFocused = false; });
+  $('#zin').onclick = () => svg.transition().duration(dur(280)).call(zoom.scaleBy, 2);
+  $('#zout').onclick = () => svg.transition().duration(dur(280)).call(zoom.scaleBy, .5);
+  $('#vLondon').onclick = () => svg.transition().duration(dur(700)).call(zoom.transform, d3.zoomIdentity);
+  $('#vUK').onclick = () => { const x0=px(-6.4),x1=px(1.9),y0=py(58.7),y1=py(49.9), k=0.92*Math.min(cssW/(x1-x0), cssH/(y1-y0));
+    svg.transition().duration(dur(800)).call(zoom.transform, d3.zoomIdentity.translate(cssW/2,cssH/2).scale(k).translate(-(x0+x1)/2,-(y0+y1)/2)); };
+  new ResizeObserver(resize).observe($('#mapwrap'));
+  resize();
+  const re = () => { readColors(); schedule(); };
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', re);
+  new MutationObserver(re).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+  if (document.fonts) document.fonts.ready.then(()=>{ mcache.clear(); schedule(); });
+}
+let mapFocused = false;
+function resize(){
+  const r=$('#mapwrap').getBoundingClientRect();
+  cssW=r.width; cssH=r.height; dpr=Math.min(window.devicePixelRatio||1, 2);
+  cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssH*dpr);
+  schedule(); drawPins();
+}
+function schedule(){ if (!raf && MAP.ready) raf=requestAnimationFrame(draw); }
+function syncView(){ const z=Zof(T.k); $('#vLondon').setAttribute('aria-pressed', String(z>=9)); $('#vUK').setAttribute('aria-pressed', String(z<9)); }
+function viewBB(m=0){ const [x0,y0]=T.invert([-m,-m]), [x1,y1]=T.invert([cssW+m,cssH+m]); return [x0,y0,x1,y1]; }
+const hit = (a,b) => !(a[2]<b[0]||a[0]>b[2]||a[3]<b[1]||a[1]>b[3]);
+function ensureLeaves(layer, vb){
+  const cx=(vb[0]+vb[2])/2, cy=(vb[1]+vb[3])/2;
+  const want = MAP.leaves[layer].filter(L=>L.flag && !MAP.loaded.has(layer+L.id) && !MAP.loading.has(layer+L.id) && hit(L.bb, vb))
+    .sort((a,b)=>Math.hypot((a.bb[0]+a.bb[2])/2-cx,(a.bb[1]+a.bb[3])/2-cy)-Math.hypot((b.bb[0]+b.bb[2])/2-cx,(b.bb[1]+b.bb[3])/2-cy));
+  for (const L of want){
+    if (MAP.loading.size>=6) break;
+    const key=layer+L.id; MAP.loading.add(key);
+    fetch(`map/${layer}/${L.id}.bin`).then(r=>{ if (!r.ok) throw 0; return r.arrayBuffer(); })
+      .then(b=>{ decodeBin(b, L); MAP.loaded.add(key); })
+      .catch(()=>{ L.flag=0; L.failed=true; })
+      .finally(()=>{ MAP.loading.delete(key); schedule(); });
+  }
+}
+const ROADS = [
+  {c:7, z:15, w:{15:.8,17:2.5,18:4}, col:'minor', dash:[2,2]},
+  {c:6, z:12.6, w:{12.6:.35,14:.9,15:2.2,16:4,17:7,18:11}, col:'minor'},
+  {c:5, z:11.6, w:{11.6:.45,13:1,14:2,15:3.4,16:5.5,17:9,18:13}, col:'r5'},
+  {c:4, z:10.2, w:{10.2:.5,12:1.1,13:1.9,14:3,15:4.4,16:6.5,17:10,18:14}, col:'r4'},
+  {c:3, z:8.6, w:{8.6:.45,10:.8,11:1.2,12:1.8,13:2.6,14:3.6,15:5,16:7.5,17:11,18:15}, col:'r3'},
+  {c:2, z:6.5, w:{6.5:.5,9:1,11:1.7,12:2.3,13:3,14:4,15:5.6,16:8,17:12,18:16}, col:'r2'},
+  {c:1, z:6, w:{6:.6,9:1.2,11:2,12:2.6,13:3.3,14:4.4,15:6,16:8.5,17:12.5,18:17}, col:'r1'}
+];
+function draw(){
+  raf=0; if (!cssW) return;
+  const k=T.k, Z=Zof(k);
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle=COL.sea; ctx.fillRect(0,0,cssW,cssH);
+  ctx.setTransform(dpr*k,0,0,dpr*k,dpr*T.x,dpr*T.y); ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.fillStyle=COL.land; ctx.fill(MAP.landPath);
+  const vb=viewBB(40);
+  if (Z>=MIDZ) ensureLeaves('m', vb);
+  if (Z>=DETZ) ensureLeaves('d', vb);
+  const cells=[]; MAP.cells.forEach(c=>{ const on = c.layer==='b' ? Z<MIDZ : c.layer==='m' ? Z>=MIDZ : Z>=DETZ; if (on && hit(c.bb, vb)) cells.push(c); });
+  if (Z>=MIDZ){
+    // regional tiles carry the detailed coastline: repaint each as sea, then fill its land
+    const vis = MAP.leaves.m.filter(L=>hit(L.bb, vb) && !L.failed && (MAP.cells.has('m'+L.id) || !L.flag));
+    ctx.fillStyle=COL.sea; for (const L of vis) ctx.fillRect(L.bb[0], L.bb[1], L.bb[2]-L.bb[0], L.bb[3]-L.bb[1]);
+    ctx.fillStyle=COL.land; ctx.strokeStyle=COL.land; ctx.lineWidth=1.5/k;
+    for (const L of vis){ const c=MAP.cells.get('m'+L.id); if (c && c.polys[40]){ ctx.fill(c.polys[40],'evenodd'); ctx.stroke(c.polys[40]); } }
+  }
+  ctx.fillStyle=COL.london; ctx.fill(MAP.londonPath);
+  const fill=(cls,color)=>{ ctx.fillStyle=color; for (const c of cells){ const p=c.polys[cls]; if(p) ctx.fill(p,'evenodd'); } };
+  const stroke=(cls,color,w,dash)=>{ ctx.strokeStyle=color; ctx.lineWidth=w/k; ctx.setLineDash(dash?dash.map(d=>d/k):[]); for (const c of cells){ const p=c.lines[cls]; if(p) ctx.stroke(p); } };
+  if (Z>=9){ fill(22,COL.wood); fill(21,COL.park); fill(23,COL.cem); }
+  if (Z>=8) fill(20,COL.water);
+  if (Z>=10) stroke(9, COL.river, stops(Z,{10:.7,13:1.6,15:3,17:6}));
+  if (Z>=12) stroke(10, COL.river, stops(Z,{12:.7,15:2.5,17:5}));
+  if (Z>=10){ stroke(8, COL.rail, stops(Z,{10:.6,13:1,16:1.8})); }
+  const on = ROADS.filter(r=>Z>=r.z), white = Z>=14;
+  if (white) for (const r of on){ if (r.c===7) continue; stroke(r.c, COL.casing, stops(Z,r.w)+(Z>=15?2:1.4)); }
+  for (const r of on){
+    let col = white ? COL.minor : (r.c>=6 ? COL['minor-low'] : COL[r.col]);
+    stroke(r.c, col, stops(Z,r.w), r.dash);
+  }
+  ctx.setLineDash([]);
+  if (Z>=8.4 && Z<14){ ctx.strokeStyle=COL.borough; ctx.lineWidth=1/k; ctx.setLineDash([4/k,3/k]); ctx.stroke(MAP.boroughPath); ctx.setLineDash([]); }
+  if (Z<14.5){ ctx.strokeStyle=COL['label-2']; ctx.lineWidth=(Z<9?1:1.4)/k; ctx.stroke(MAP.londonPath); }
+  const showGrid = Z>=9 && Z<15.8;
+  if (showGrid && Z<13.6){
+    ctx.strokeStyle=COL.grid; ctx.lineWidth=1/k; ctx.beginPath();
+    for (let c=0;c<=GRID.cols;c++){ const x=px(GRID.lon0+(GRID.lon1-GRID.lon0)*c/GRID.cols); ctx.moveTo(x,py(GRID.lat0)); ctx.lineTo(x,py(GRID.lat1)); }
+    for (let r=0;r<=GRID.rows;r++){ const y=py(GRID.lat0-(GRID.lat0-GRID.lat1)*r/GRID.rows); ctx.moveTo(px(GRID.lon0),y); ctx.lineTo(px(GRID.lon1),y); }
+    ctx.stroke();
+  }
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  drawLabels(Z, cells);
+  if (showGrid) drawMargins();
+  drawScale();
+}
+const boxes=[], mcache=new Map();
+function measure(font, t){ const key=font+'|'+t; let w=mcache.get(key); if (w==null){ ctx.font=font; w=ctx.measureText(t).width; if (mcache.size>8000) mcache.clear(); mcache.set(key,w); } return w; }
+function free(b){ for (const o of boxes) if (!(b[2]<o[0]||b[0]>o[2]||b[3]<o[1]||b[1]>o[3])) return false; return true; }
+function text(t, x, y, font, color, o={}){
+  const w=measure(font,t), h=o.h||12, pad=o.pad??3;
+  const bx = o.left ? x+6 : x-w/2, by=y-h/2, b=[bx-pad, by-pad, bx+w+pad, by+h+pad];
+  if (b[2]<0||b[0]>cssW||b[3]<0||b[1]>cssH||!free(b)) return false;
+  boxes.push(b);
+  ctx.font=font; ctx.textBaseline='middle'; ctx.textAlign=o.left?'left':'center';
+  if ('letterSpacing' in ctx) ctx.letterSpacing=o.ls||'0px';
+  ctx.lineWidth=o.halo??3; ctx.strokeStyle=COL.halo; ctx.lineJoin='round';
+  const tx = o.left ? x+6 : x;
+  ctx.strokeText(t,tx,y); ctx.fillStyle=color; ctx.fillText(t,tx,y);
+  if ('letterSpacing' in ctx) ctx.letterSpacing='0px';
+  return true;
+}
+function drawLabels(Z, cells){
+  boxes.length=0;
+  for (const p of pinScreen) boxes.push([p.x-10,p.y-10,p.x+10,p.y+10]);
+  boxes.push([0,0,cssW,20]); boxes.push([0,0,20,cssH]);
+  const sx=x=>T.applyX(x), sy=y=>T.applyY(y);
+  if (Z<9.4){
+    const L=MAP.labels.find(l=>l.cls===0 && l.name==='London');
+    if (L) text('London', sx(L.x), sy(L.y)-(Z<8?12:0), `800 ${Z<7?14:18}px ${FONT}`, COL.label, {ls:'-0.5px', h:16});
+    for (const c of MAP.uk){
+      if (c.r===3 && Z<7.2 || c.r===2 && Z<6.1) continue;
+      const x=sx(c.x), y=sy(c.y);
+      if (text(c.name, x, y, `${c.r===1?700:500} ${c.r===1?13.5:12}px ${FONT}`, c.r===3?COL['label-2']:COL.label, {left:true})){
+        ctx.fillStyle=COL.label; ctx.beginPath(); ctx.arc(x,y,c.r===1?2.6:2,0,7); ctx.fill();
+      }
+    }
+    return;
+  }
+  for (const l of MAP.labels) if ((l.cls===0 && l.name!=='London') || l.cls===1) text(l.name, sx(l.x), sy(l.y), `800 ${Z<11?13:15}px ${FONT}`, COL.label, {ls:'-0.3px', h:14});
+  if (Z>=10 && Z<12.4) for (const b of MAP.boroughs) text(b.name.toUpperCase(), sx(b.x), sy(b.y), `600 10px ${FONT}`, COL['label-2'], {ls:'1.4px', h:10});
+  if (Z>=11) for (const c of cells) for (const l of c.labels) if (l.cls===2) text(l.name, sx(l.x), sy(l.y), `700 ${Z<13?12.5:13.5}px ${FONT}`, COL.label);
+  if (Z>=13.6) for (const c of cells) for (const l of c.labels) if (l.cls===5){
+    const x=sx(l.x), y=sy(l.y);
+    if (text(l.name, x, y, `600 11.5px ${FONT}`, COL.label, {left:true})){ ctx.fillStyle=COL.label; ctx.fillRect(x-3,y-3,6,6); }
+  }
+  if (Z>=12.8) for (const c of cells) for (const l of c.labels) if (l.cls===3) text(l.name, sx(l.x), sy(l.y), `500 12px ${FONT}`, COL['label-2']);
+  if (Z>=12.6) for (const c of cells) for (const l of c.labels) if (l.cls===30) text(l.name, sx(l.x), sy(l.y), `500 12px ${FONT}`, COL['park-label']);
+  if (Z>=14.6) for (const c of cells) for (const l of c.labels) if (l.cls===31) text(l.name, sx(l.x), sy(l.y), `500 11.5px ${FONT}`, COL['park-label']);
+  if (Z>=13.4){
+    const seen=new Map(), order=[]; let n=0;
+    const minZ = c => c<=4 ? 13.4 : c===5 ? 14.4 : 15.2;
+    for (const c of cells) for (const s of c.streets) if (Z>=minZ(s.cls) && s.len*T.k>40) order.push(s);
+    order.sort((a,b)=>a.cls-b.cls || b.len-a.len);
+    for (const s of order){
+      if (n>260) break;
+      const ax=sx(s.ax), ay=sy(s.ay), bx=sx(s.bx), by=sy(s.by), mx=(ax+bx)/2, my=(ay+by)/2;
+      if (mx<-50||mx>cssW+50||my<-50||my>cssH+50) continue;
+      const fs = s.cls<=4?11.5:11, font=`${s.cls<=4?600:500} ${fs}px ${FONT}`;
+      const w=measure(font,s.name), L=Math.hypot(bx-ax,by-ay);
+      if (L < w+12) continue;
+      const prev=seen.get(s.name); if (prev && prev.some(p=>Math.hypot(p[0]-mx,p[1]-my)<240)) continue;
+      let a=Math.atan2(by-ay,bx-ax); if (a>Math.PI/2) a-=Math.PI; if (a<-Math.PI/2) a+=Math.PI;
+      const h=fs, cw=Math.abs(w*Math.cos(a))+Math.abs(h*Math.sin(a)), ch=Math.abs(w*Math.sin(a))+Math.abs(h*Math.cos(a));
+      const b=[mx-cw/2-2, my-ch/2-2, mx+cw/2+2, my+ch/2+2];
+      if (!free(b)) continue;
+      boxes.push(b); n++; (prev || seen.set(s.name,[]).get(s.name)).push([mx,my]);
+      ctx.save(); ctx.translate(mx,my); ctx.rotate(a); ctx.font=font; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.lineWidth=3; ctx.strokeStyle=COL.halo; ctx.strokeText(s.name,0,.5); ctx.fillStyle=s.cls<=4?COL.label:COL['label-2']; ctx.fillText(s.name,0,.5); ctx.restore();
+    }
+  }
+}
+function drawMargins(){
+  const x0=T.applyX(px(GRID.lon0)), x1=T.applyX(px(GRID.lon1)), y0=T.applyY(py(GRID.lat0)), y1=T.applyY(py(GRID.lat1));
+  if (x1<0||x0>cssW||y1<0||y0>cssH) return;
+  ctx.fillStyle=COL.margin; ctx.fillRect(0,0,cssW,18); ctx.fillRect(0,18,18,cssH-18);
+  ctx.fillStyle=COL.label; ctx.font=`700 10px ${FONT}`; ctx.textAlign='center'; ctx.textBaseline='middle';
+  if ('letterSpacing' in ctx) ctx.letterSpacing='0px';
+  const cw=(x1-x0)/GRID.cols, rh=(y1-y0)/GRID.rows;
+  for (let c=0;c<GRID.cols;c++){ const a=Math.max(x0+c*cw,20), b=Math.min(x0+(c+1)*cw,cssW); if (b-a>14) ctx.fillText(GRID.letters[c],(a+b)/2,9.5); }
+  for (let r=0;r<GRID.rows;r++){ const a=Math.max(y0+r*rh,20), b=Math.min(y0+(r+1)*rh,cssH); if (b-a>14) ctx.fillText(String(r+1),9.5,(a+b)/2); }
+}
+function drawScale(){
+  const lat=unpy(T.invert([cssW/2,cssH/2])[1]), mpp=6378137*Math.cos(lat*R2D)/(S*T.k);
+  const steps=[20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000,200000];
+  let d=steps[0]; for (const s of steps) if (s/mpp<=110) d=s;
+  $('#scale').innerHTML=`${d>=1000?d/1000+' KM':d+' M'}<i style="width:${Math.round(d/mpp)}px"></i>`;
+}
+
+/* =================== PINS =================== */
+let pinScreen=[];
+function visibleTrees(){
+  const q=state.q.trim().toLowerCase();
+  return state.trees.filter(t => (!state.filter.size || state.filter.has(t.species)) &&
+    (!q || [t.place,t.region,t.variety,t.notes,SP[t.species].n,codeOf(t)].join(' ').toLowerCase().includes(q)));
+}
+function drawPins(){
+  if (!gPins) return;
+  const items=visibleTrees().filter(t=>isFinite(t._x)).map(t=>({t, x:T.applyX(t._x), y:T.applyY(t._y)}));
+  const G=24, cells=new Map();
+  for (const it of items){
+    if (state.sel===it.t.id){ cells.set('sel',[it]); continue; }
+    const key=Math.round(it.x/G)+','+Math.round(it.y/G);
+    if (!cells.has(key)) cells.set(key,[]); cells.get(key).push(it);
+  }
+  const singles=[], clusters=[];
+  cells.forEach((arr,key)=> arr.length===1 ? singles.push(arr[0]) : clusters.push({key, arr, x:d3.mean(arr,d=>d.x), y:d3.mean(arr,d=>d.y)}));
+  singles.sort((a,b)=> (a.t.id===state.sel)-(b.t.id===state.sel));
+  pinScreen = singles.map(s=>({x:s.x,y:s.y})).concat(clusters.map(c=>({x:c.x,y:c.y})));
+  gPins.selectAll('g.cluster').data(clusters, d=>d.key).join(enter=>{ const g=enter.append('g').attr('class','cluster').attr('role','button').attr('tabindex',0); g.append('circle'); g.append('text'); return g; })
+    .attr('transform', d=>`translate(${d.x},${d.y})`)
+    .attr('aria-label', d=>`${d.arr.length} trees here, zoom in`)
+    .each(function(d){ d3.select(this).select('circle').attr('r', 10+Math.min(6,d.arr.length)); d3.select(this).select('text').text(d.arr.length); })
+    .on('click', (ev,d)=>{ ev.stopPropagation(); if (picking) return; zoomToTrees(d.arr.map(i=>i.t)); })
+    .on('keydown', (ev,d)=>{ if (ev.key==='Enter'){ ev.preventDefault(); zoomToTrees(d.arr.map(i=>i.t)); } });
+  gPins.selectAll('g.pin:not(.draft)').data(singles, d=>d.t.id).join(enter=>{
+      const g=enter.append('g').attr('class','pin').attr('role','button').attr('tabindex',0);
+      g.append('circle').attr('class','ring'); g.append('circle').attr('class','disc'); g.append('g').attr('class','segs'); return g; })
+    .attr('transform', d=>`translate(${d.x},${d.y})`)
+    .attr('aria-label', d=>`${SP[d.t.species].n}, ${d.t.place}`)
+    .each(function(d){
+      const g=d3.select(this), on=d.t.id===state.sel;
+      const r = 8 * (on ? 1.35 : 1);
+      g.select('.ring').attr('r', r+5).attr('opacity', on?1:0);
+      g.select('.disc').attr('r', r).attr('fill', SP[d.t.species].c);
+      g.select('.segs').selectAll('line').data(d3.range(8)).join('line').attr('class','seg-l')
+        .attr('x1',0).attr('y1',0).attr('x2',i=>Math.cos(i*Math.PI/4)*r*.7).attr('y2',i=>Math.sin(i*Math.PI/4)*r*.7);
+    })
+    .on('click', (ev,d)=>{ ev.stopPropagation(); if (picking) return; select(d.t.id,false); })
+    .on('keydown', (ev,d)=>{ if (ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); select(d.t.id,false); } })
+    .order();
+  drawMe();
+  const showDraft = draft && (!$('#sheet').hidden || picking);
+  gPins.selectAll('g.draft').data(showDraft?[draft]:[]).join(enter=>{ const g=enter.append('g').attr('class','pin draft'); g.append('circle').attr('class','disc').attr('r',9); g.append('path').attr('class','cross').attr('d','M-4 0H4M0 -4V4'); return g; })
+    .attr('transform', d=>`translate(${T.applyX(px(d.lng))},${T.applyY(py(d.lat))})`).raise();
+  schedule();
+}
+function flyTo(x, y, Z){ const k=Z?kOf(Z):T.k; svg.transition().duration(dur(750)).call(zoom.transform, d3.zoomIdentity.translate(cssW/2, cssH/2).scale(k).translate(-x,-y)); }
+function zoomToTrees(list){
+  const xs=list.map(t=>t._x), ys=list.map(t=>t._y), w=Math.max(d3.max(xs)-d3.min(xs),1e-6), h=Math.max(d3.max(ys)-d3.min(ys),1e-6);
+  const k=Math.min(kOf(17.5), 0.55*Math.min(cssW/w, cssH/h));
+  if (k<=T.k*1.05){ select(list[0].id,false); return; }
+  svg.transition().duration(dur(700)).call(zoom.transform, d3.zoomIdentity.translate(cssW/2,cssH/2).scale(k).translate(-(d3.min(xs)+d3.max(xs))/2, -(d3.min(ys)+d3.max(ys))/2));
+}
+function focusTree(t){
+  const sx=T.applyX(t._x), sy=T.applyY(t._y), inView = sx>40 && sx<cssW-40 && sy>40 && sy<cssH-60;
+  if (inView && Zof(T.k)>=13) return;
+  flyTo(t._x, t._y, Math.max(Zof(T.k), 14.6));
+}
+
+/* =================== OVERVIEW, INDEX, DETAIL =================== */
+function renderOverview(){
+  const n=state.trees.length, fr=state.trees.filter(t=>t.fruiting==='yes').length;
+  const regions=new Set(state.trees.map(t=>t.region||'London')).size, kinds=new Set(state.trees.map(t=>t.species).filter(k=>k!=='unknown')).size;
+  const counts=d3.rollup(state.trees, v=>v.length, d=>d.species);
+  $('#tTrees').textContent = n || '–'; $('#tKinds').textContent = n ? kinds : '–';
+  $('#tFruit').textContent = n ? `${fr} of ${n}` : '–'; $('#tRegions').textContent = n ? regions : '–';
+  $('#mixBar').innerHTML = n ? SPECIES.filter(s=>counts.get(s.k)).map(s=>`<i style="width:${(counts.get(s.k)/n*100).toFixed(2)}%;background:${s.c}"></i>`).join('') : '';
+  $('#key').innerHTML = SPECIES.filter(s=>counts.get(s.k)).map(s=>`<button class="kitem" type="button" data-k="${s.k}" aria-pressed="${!state.filter.size || state.filter.has(s.k)}"><span class="sw" style="background:${s.c}"></span>${s.n}<span class="n">${counts.get(s.k)}</span></button>`).join('');
+  $('#showAll').hidden = !state.filter.size;
+}
+function renderList(){
+  const v=visibleTrees();
+  $('#list').innerHTML = v.length ? v.map(t=>{
+    const s=SP[t.species], fr=t.fruiting==='yes'?'<span class="yes">Fruiting</span>':(t.fruiting==='flowers'?'Flowering':'<span class="m">—</span>');
+    return `<tr data-id="${esc(t.id)}" class="${t.id===state.sel?'sel':''}" tabindex="0">
+      <td class="code">${codeOf(t)}</td>
+      <td><span class="pl">${esc(t.place)}</span>${t.region&&t.region!=='London'?`<span class="m">, ${esc(t.region)}</span>`:''}</td>
+      <td><span class="sw-inline" style="background:${s.c}"></span>${s.n}</td>
+      <td class="hide-m">${fr}</td>
+      <td class="num hide-m">${fmtDate(t.seen)}</td>
+      <td class="num">${gridRef(t.lat,t.lng)||`<span class="m">${esc(nearTown(t.lat,t.lng)||'UK')}</span>`}</td></tr>`;
+  }).join('') : `<tr><td colspan="6" class="m" style="padding:18px 0">${state.mode==='loading'?'Loading trees…':state.trees.length?'Nothing matches. Clear the search or show all kinds.':'No trees yet. Add the first one.'}</td></tr>`;
+  renderAreas();
+}
+function renderAreas(){
+  const q=state.q.trim().toLowerCase(), el=$('#areas');
+  if (q.length<3 || !MAP.ready){ el.hidden=true; return; }
+  if (!MAP.areaIndex){ loadGaz().then(renderAreas); return; }
+  const seen=new Set(), hits=[];
+  for (const a of MAP.areaIndex){ const n=a.name.toLowerCase(); if ((n.startsWith(q)||n.includes(' '+q)) && !seen.has(a.name)){ seen.add(a.name); hits.push(a); } }
+  hits.sort((a,b)=>(b.name.toLowerCase().startsWith(q))-(a.name.toLowerCase().startsWith(q)) || a.cls-b.cls); hits.length=Math.min(hits.length,4);
+  el.innerHTML = hits.map((a,i)=>`<button type="button" data-i="${i}">Show ${esc(a.name)} on the map</button>`).join('');
+  el.hidden=!hits.length;
+  el.onclick = e=>{ const b=e.target.closest('button'); if (!b) return; const a=hits[+b.dataset.i]; flyTo(px(a.lng), py(a.lat), a.cls<=1?13.2:14.8); $('#mapwrap').scrollIntoView({behavior:smooth(), block:'center'}); };
+}
+function sortTrees(){
+  state.trees.sort((a,b)=> (b.addedAt||0)-(a.addedAt||0) || String(b.seen||'').localeCompare(String(a.seen||'')));
+}
+function number(){
+  const asc=[...state.trees].sort((a,b)=>(a.addedAt||0)-(b.addedAt||0) || String(a.seen||'').localeCompare(String(b.seen||'')) || a.id.localeCompare(b.id));
+  state.num=new Map(asc.map((t,i)=>[t.id, String(i+1).padStart(3,'0')]));
+}
+function renderAll(){ renderOverview(); renderList(); drawPins(); if (state.sel) renderDetail(); }
+
+async function renderDetail(){
+  const t=state.trees.find(x=>x.id===state.sel), el=$('#detail');
+  if (!t){ closeDetail(); return; }
+  const s=SP[t.species], img=safeImg(t.photoUrl)||safeImg(t.thumb);
+  const src=safeUrl(t.source), credUrl=safeUrl(t.creditUrl), ref=gridRef(t.lat,t.lng);
+  el.innerHTML = `<button class="back" type="button" id="back">← Overview</button>
+    <div class="photo" id="photo">${img?`<img src="${esc(img)}" alt="Photo of the ${esc(s.n.toLowerCase())} tree at ${esc(t.place)}">`:sliceSVG(s.c,80)}</div>
+    ${t.credit?`<div class="credit">${credUrl?`<a href="${esc(credUrl)}" target="_blank" rel="noopener">${esc(t.credit)}</a>`:esc(t.credit)}</div>`:''}
+    <h2 class="ttl">${esc(t.place)}</h2>
+    <div class="row"><span class="v"><span class="sw-inline" style="background:${s.c}"></span>${s.n}${t.variety?`, ${esc(t.variety)}`:''}</span><span class="k">Kind</span></div>
+    <div class="row"><span class="v" style="font-weight:500;font-style:italic">${esc(s.l)}</span><span class="k">Latin</span></div>
+    <div class="row"><span class="v${t.fruiting==='yes'?' yes':''}">${FRUIT[t.fruiting]||'Not sure'}</span><span class="k">Fruit</span></div>
+    <div class="row"><span class="v">${SETTING_LABEL[t.setting]||'—'}</span><span class="k">Growing</span></div>
+    <div class="row"><span class="v">${fmtDate(t.seen)}</span><span class="k">Last seen</span></div>
+    <div class="row"><span class="v">${t.lat.toFixed(5)}, ${t.lng.toFixed(5)}${t.approx?' <span class="approx">approx.</span>':''}</span><span class="k">${ref?'Grid '+ref:esc(t.region||('Near '+(nearTown(t.lat,t.lng)||'UK')))}</span></div>
+    ${t.notes?`<p class="desc">${esc(t.notes)}</p>`:''}
+    <div class="row"><span class="v" id="addedBy">${t.seed?'Starter record':'A visitor'}</span><span class="k">Recorded by</span></div>
+    <div class="row"><span class="v">${codeOf(t)}</span><span class="k">Code</span></div>
+    ${src?`<div class="row"><span class="v"><a href="${esc(src)}" target="_blank" rel="noopener">${esc(t.sourceName||new URL(src).hostname)}</a></span><span class="k">Source</span></div>`:''}
+    <div class="links2">
+      <button type="button" id="copyLoc">Copy coordinates</button>
+      <a href="https://www.google.com/maps/@?api=1&map_action=map&center=${t.lat.toFixed(5)},${t.lng.toFixed(5)}&zoom=20&basemap=satellite" target="_blank" rel="noopener">Satellite view</a>
+      <a href="https://www.google.com/maps/search/?api=1&query=${t.lat.toFixed(5)},${t.lng.toFixed(5)}" target="_blank" rel="noopener">Directions</a>
+    </div>
+`;
+  $('#overview').hidden=true; el.hidden=false;
+  $('#back').onclick = ()=>{ state.sel=null; closeDetail(); drawPins(); renderList(); };
+  $('#copyLoc').onclick = ()=>copyText(`${t.lat.toFixed(5)}, ${t.lng.toFixed(5)}`, 'Coordinates copied');
+}
+function closeDetail(){ $('#detail').hidden=true; $('#overview').hidden=false; $('#peek').hidden=true; }
+function select(id, fromList){
+  state.sel=id; const t=state.trees.find(x=>x.id===id); if (!t) return;
+  renderDetail(); drawPins(); renderList();
+  if (fromList){ focusTree(t); $('#mapwrap').scrollIntoView({behavior:smooth(), block: narrow()?'start':'center'}); }
+  if (narrow()){
+    const s=SP[t.species], img=safeImg(t.thumb)||safeImg(t.photoUrl), pk=$('#peek');
+    pk.innerHTML=`${img?`<img src="${esc(img)}" alt="">`:`<span class="ph">${sliceSVG(s.c,44)}</span>`}<span><strong>${esc(t.place)}</strong><br><span class="hint">${s.n} · ${codeOf(t)} · details below</span></span>`;
+    pk.hidden=false;
+  }
+}
+$('#peek').onclick = ()=>$('#spec').scrollIntoView({behavior:smooth()});
+$('#list').addEventListener('click', e=>{ const r=e.target.closest('tr[data-id]'); if (r) select(r.dataset.id, true); });
+$('#list').addEventListener('keydown', e=>{ const r=e.target.closest('tr[data-id]'); if (r && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); select(r.dataset.id, true); } });
+$('#key').addEventListener('click', e=>{
+  const b=e.target.closest('.kitem'); if (!b) return; const k=b.dataset.k;
+  if (state.filter.has(k)) state.filter.delete(k); else state.filter.add(k);
+  if (state.filter.size===new Set(state.trees.map(t=>t.species)).size) state.filter.clear();
+  renderOverview(); renderList(); drawPins();
+});
+$('#showAll').onclick = ()=>{ state.filter.clear(); renderOverview(); renderList(); drawPins(); };
+$('#q').addEventListener('focus', ()=>{ if (MAP.ready) loadGaz(); });
+let qT; $('#q').addEventListener('input', e=>{ clearTimeout(qT); qT=setTimeout(()=>{ state.q=e.target.value; renderList(); drawPins(); },120); });
+function copyText(t, ok){ try { navigator.clipboard.writeText(t).then(()=>toast(ok), ()=>toast('Select the text and copy it')); } catch { toast('Select the text and copy it'); } }
+
+/* =================== ADD FORM =================== */
+let photo=null, picking=false;
+const CAM='<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M4 7h3l2-2h6l2 2h3v12H4z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+function opts(el, name, list, sel){ el.innerHTML=list.map(([k,label,color])=>`<label><input type="radio" name="${name}" value="${k}"${k===sel?' checked':''}>${color?`<span class="sw" style="background:${color}"></span>`:''}${label}</label>`).join(''); }
+function resetForm(){
+  $('#addForm').reset(); photo=null; draft=null;
+  opts($('#fSpecies'),'species',SPECIES.map(s=>[s.k,s.n,s.c]),null);
+  opts($('#fSetting'),'setting',Object.entries(SETTINGS),'front');
+  opts($('#fFruit'),'fruit',Object.entries(FRUIT),'unknown');
+  $('#fSeen').value=new Date().toISOString().slice(0,10);
+  $('#prev').innerHTML=CAM;
+  $('#photoHint').textContent="If your phone saved where the photo was taken, the pin drops itself.";
+  $('#locState').textContent='No location yet.'; $('#locState').className='locstate';
+  $('#formErr').textContent='';
+  $('#sheetBody').querySelector('.copywrap')?.remove(); $('#addForm').hidden=false;
+}
+resetForm();
+function openSheet(){ $('#sheet').hidden=false; drawPins(); setTimeout(()=>$('#closeSheet').focus(),30); }
+function closeSheet(){ $('#sheet').hidden=true; drawPins(); }
+$('#addBtn').onclick = $('#addTop').onclick = ()=>{ if (!picking) openSheet(); };
+$('#closeSheet').onclick = closeSheet;
+$('#sheet').addEventListener('click', e=>{ if (e.target.id==='sheet') closeSheet(); });
+document.addEventListener('keydown', e=>{ if (e.key==='Escape'){ if (picking) endPick(false); else if (!$('#sheet').hidden) closeSheet(); } });
+const inUK=(lat,lng)=>lat>=UKB.lat[0]&&lat<=UKB.lat[1]&&lng>=UKB.lng[0]&&lng<=UKB.lng[1];
+function setDraft(lat,lng,how){
+  if (!isFinite(lat)||!isFinite(lng)) return false;
+  if (!inUK(lat,lng)){ $('#locState').textContent="That spot is outside the UK, which is all the map covers for now."; $('#locState').className='locstate err'; return false; }
+  draft={lat:+lat.toFixed(5), lng:+lng.toFixed(5)};
+  const ref=gridRef(draft.lat,draft.lng);
+  $('#locState').textContent=`✓ ${how}: ${draft.lat}, ${draft.lng}${ref?` · grid ${ref}`:''}`; $('#locState').className='locstate ok';
+  drawPins(); return true;
+}
+function parseCoords(s){
+  s=s.trim();
+  if (/maps\.app\.goo\.gl|goo\.gl\/maps/.test(s)) return {err:"Short Google links can't be read here. Open the link and copy the numbers from the address bar, or use Pick on the map."};
+  const m=s.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/)||s.match(/[?&](?:q|query|ll|center)=(-?\d+\.\d+)(?:,|%2C)\s*(-?\d+\.\d+)/)||s.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)||s.match(/^\(?\s*(-?\d{1,2}(?:\.\d+)?)\s*[, ]\s*(-?\d{1,3}(?:\.\d+)?)\s*\)?$/);
+  return m?{lat:+m[1],lng:+m[2]}:{err:"Couldn't find coordinates in that. Try a format like 51.5072, -0.1276."};
+}
+$('#useCoords').onclick=()=>{ const r=parseCoords($('#fCoords').value); if (r.err){ $('#locState').textContent=r.err; $('#locState').className='locstate err'; return; } if (setDraft(r.lat,r.lng,'From your link')) flyTo(px(r.lng),py(r.lat),15.5); };
+$('#fCoords').addEventListener('keydown', e=>{ if (e.key==='Enter'){ e.preventDefault(); $('#useCoords').click(); } });
+$('#pickBtn').onclick=()=>{
+  picking=true; closeSheet(); $('#app').classList.add('picking'); $('#pickbar').hidden=false; mapFocused=true;
+  $('#mapwrap').scrollIntoView({behavior:smooth(), block:'center'});
+  if (draft) flyTo(px(draft.lng),py(draft.lat),Math.max(Zof(T.k),15));
+  else if (me) flyTo(px(me.lng),py(me.lat),Math.max(Zof(T.k),16.5));
+  else if (Zof(T.k)<12) toast('Zoom in to street level, then tap the spot');
+};
+function endPick(placed){ picking=false; $('#app').classList.remove('picking'); $('#pickbar').hidden=true; openSheet(); if (placed) toast('Pin placed'); }
+$('#pickCancel').onclick=()=>endPick(false);
+async function loadImage(file){ try { return await createImageBitmap(file); } catch { return await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src=URL.createObjectURL(file); }); } }
+function encode(img,maxSide,budget){
+  for (const side of [maxSide,maxSide*.8,maxSide*.62,maxSide*.48]){
+    const s=Math.min(1,side/Math.max(img.width,img.height)), c=document.createElement('canvas');
+    c.width=Math.round(img.width*s); c.height=Math.round(img.height*s); c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    for (let q=.82;q>=.42;q-=.08){ const out=c.toDataURL('image/jpeg',q); if (out.length<=budget) return out; }
+  }
+  return null;
+}
+async function takePhoto(file){
+  if (!file) return;
+  if (!/^image\//.test(file.type) && !/\.(heic|heif)$/i.test(file.name)){ $('#photoHint').textContent='That file is not a photo.'; return; }
+  $('#photoHint').textContent='Reading photo…';
+  try {
+    const img=await loadImage(file), full=encode(img,1600,700000), thumb=encode(img,240,24000);
+    if (!full||!thumb) throw 0;
+    photo={full,thumb}; $('#prev').innerHTML=`<img src="${thumb}" alt="Your photo">`;
+    let msg='Photo ready.';
+    if (window.exifr){
+      const g=await exifr.gps(file).catch(()=>null);
+      if (g && isFinite(g.latitude) && isFinite(g.longitude) && !draft && setDraft(g.latitude,g.longitude,'From your photo')){ msg='Photo ready, and we found where it was taken.'; flyTo(px(g.longitude),py(g.latitude),15.5); }
+      const meta=await exifr.parse(file,['DateTimeOriginal']).catch(()=>null);
+      if (meta && meta.DateTimeOriginal instanceof Date && !isNaN(meta.DateTimeOriginal)) $('#fSeen').value=meta.DateTimeOriginal.toISOString().slice(0,10);
+    }
+    if (!draft) msg+=' No location in it, so drop the pin below.';
+    $('#photoHint').textContent=msg;
+  } catch { photo=null; $('#photoHint').textContent="Couldn't read that photo. Try a JPEG or PNG."; }
+}
+$('#fPhoto').addEventListener('change', e=>takePhoto(e.target.files[0]));
+const drop=$('#drop');
+drop.addEventListener('dragover', e=>{ e.preventDefault(); drop.classList.add('over'); });
+drop.addEventListener('dragleave', ()=>drop.classList.remove('over'));
+drop.addEventListener('drop', e=>{ e.preventDefault(); drop.classList.remove('over'); takePhoto(e.dataTransfer.files[0]); });
+$('#addForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const f=new FormData(e.target), err=$('#formErr');
+  const rec={species:f.get('species'), variety:$('#fVariety').value.trim().slice(0,80), place:$('#fPlace').value.trim().slice(0,120),
+    setting:f.get('setting')||'other', fruiting:f.get('fruit')||'unknown', seen:$('#fSeen').value||'', notes:$('#fNotes').value.trim().slice(0,600)};
+  if (!rec.species){ err.textContent="Choose what kind it is. Pick 'Not sure yet' if you don't know."; return; }
+  if (!rec.place){ err.textContent='Add the street and area so people know where to look.'; $('#fPlace').focus(); return; }
+  if (!draft){ err.textContent='Drop the pin: pick on the map, paste a link, or use a photo with location.'; return; }
+  rec.lat=draft.lat; rec.lng=draft.lng; err.textContent='';
+  if (!sb || state.mode!=='db'){ err.textContent="Can't reach the tree database right now, so nothing can be saved. Try again later."; return; }
+  const btn=$('#submitAdd'); btn.disabled=true; btn.querySelector('span').textContent='Saving…';
+  try {
+    const id=crypto.randomUUID(); let photo_path=null, thumb_path=null;
+    if (photo){
+      const toBlob = async d => (await fetch(d)).blob();
+      const up = async (path, dataUrl) => { const {error}=await sb.storage.from('photos').upload(path, await toBlob(dataUrl), {contentType:'image/jpeg', upsert:false}); if (error) throw error; return path; };
+      photo_path = await up(`full/${id}.jpg`, photo.full);
+      thumb_path = await up(`thumb/${id}.jpg`, photo.thumb);
+    }
+    const row={id, species:rec.species, variety:rec.variety||null, place:rec.place, lat:rec.lat, lng:rec.lng, setting:rec.setting, fruiting:rec.fruiting,
+      seen:rec.seen||null, notes:rec.notes||null, photo_path, thumb_path};
+    const {error}=await sb.from('trees').insert(row);
+    if (error) throw error;
+    setTrees([...state.raw, {...row, approx:false, seed:false, created_at:new Date().toISOString()}]);
+    resetForm(); closeSheet(); toast('Added to the map. Thank you!');
+    select(id, true);
+  } catch(ex){
+    const msg = String(ex && (ex.message||ex.error) || '');
+    err.textContent = /Too many/i.test(msg) ? 'Lots of trees were added in the last hour, so adding is paused for a bit. Please try again later.'
+      : /size|large/i.test(msg) ? 'That photo is too big. Try a smaller one.'
+      : "Couldn't save just now. Check your connection and try again.";
+  } finally { btn.disabled=false; btn.querySelector('span').textContent='Add to the map'; }
+});
+
+/* =================== YOUR LOCATION =================== */
+let me=null, watchId=null, pendingFly=false, pendingDraft=false;
+function drawMe(){
+  if (!gPins) return;
+  const data = me ? [me] : [];
+  const g = gPins.selectAll('g.me').data(data).join(enter=>{ const g=enter.append('g').attr('class','me'); g.append('circle').attr('class','acc'); g.append('circle').attr('class','dot').attr('r',7); return g; });
+  if (!me) return;
+  const mpp = 6378137*Math.cos(me.lat*R2D)/(S*T.k);
+  g.attr('transform', `translate(${T.applyX(px(me.lng))},${T.applyY(py(me.lat))})`);
+  g.select('.acc').attr('r', Math.min(Math.max(me.acc/mpp, 0), 2000));
+  g.lower();
+}
+function locate(opts={}){
+  if (!('geolocation' in navigator)){ toast("This browser can't share your location."); return; }
+  if (opts.fly) pendingFly = true;
+  if (opts.draft) pendingDraft = true;
+  if (me && Date.now()-me.t < 30000){ onFix(); return; }
+  if (watchId != null) return;
+  $('#locate').textContent = 'Finding you…';
+  watchId = navigator.geolocation.watchPosition(pos => {
+    me = {lat:pos.coords.latitude, lng:pos.coords.longitude, acc:pos.coords.accuracy, t:Date.now()};
+    $('#locate').innerHTML = LOC_LABEL; $('#locate').setAttribute('aria-pressed','true');
+    onFix(); drawMe();
+  }, e => {
+    navigator.geolocation.clearWatch(watchId); watchId=null; pendingFly=pendingDraft=false;
+    $('#locate').innerHTML = LOC_LABEL; $('#locate').setAttribute('aria-pressed','false');
+    const m = e.code===1 ? 'Location is turned off for this site. Allow it in your browser settings to see yourself on the map.' : "Couldn't find your location. Try again with a clearer view of the sky.";
+    toast(m); if (!$('#sheet').hidden){ $('#locState').textContent=m; $('#locState').className='locstate err'; }
+  }, {enableHighAccuracy:true, maximumAge:10000, timeout:25000});
+}
+function onFix(){
+  if (!me) return;
+  if (pendingFly){ pendingFly=false; flyTo(px(me.lng), py(me.lat), Math.max(Zof(T.k), 16.2)); }
+  if (pendingDraft){
+    pendingDraft=false;
+    if (setDraft(me.lat, me.lng, `Where you're standing (±${Math.round(me.acc)} m)`)){
+      if (me.acc > 40) $('#locState').textContent += '. That is a rough fix, so check the pin or use Pick on the map to fine-tune.';
+      flyTo(px(me.lng), py(me.lat), Math.max(Zof(T.k), 16.5));
+    }
+  }
+}
+const LOC_LABEL = document.querySelector('#locate').innerHTML;
+$('#locate').onclick = () => locate({fly:true});
+$('#hereBtn').onclick = () => { $('#locState').textContent='Finding where you are…'; $('#locState').className='locstate'; locate({draft:true}); };
+
+/* =================== DATA =================== */
+function fromRow(r){
+  return {id:r.id, species:r.species, variety:r.variety||'', place:r.place, region:r.region||'', lat:r.lat, lng:r.lng, approx:!!r.approx,
+    setting:r.setting, fruiting:r.fruiting, seen:r.seen||'', notes:r.notes||'',
+    photoUrl: r.photo_url || (r.photo_path ? PHOTO_BASE+r.photo_path : null), thumb: r.thumb_path ? PHOTO_BASE+r.thumb_path : null,
+    credit:r.credit, creditUrl:r.credit_url, sourceName:r.source_name, source:r.source, seed:!!r.seed, addedAt:Date.parse(r.created_at)||0};
+}
+state.raw = [];
+function setTrees(rows){
+  state.raw = rows;
+  state.trees=rows.map(r => 'created_at' in r ? fromRow(r) : r).map(norm).filter(t=>isFinite(t.lat)&&isFinite(t.lng));
+  for (const t of state.trees){ t._x=px(t.lng); t._y=py(t.lat); }
+  number(); sortTrees();
+  if (state.sel && !state.trees.find(t=>t.id===state.sel)){ state.sel=null; closeDetail(); }
+  renderAll();
+}
+async function loadTrees(){
+  if (!sb) throw new Error('no client');
+  const {data, error} = await sb.from('trees').select('*').order('created_at', {ascending:false}).limit(5000);
+  if (error) throw error;
+  state.mode='db'; $('#modeNote').innerHTML='';
+  setTrees(data);
+}
+async function useSeedFallback(reason){
+  state.mode='seed'; $('#modeNote').innerHTML=`<div class="note">${reason}</div>`;
+  try { setTrees(await fetch('seed.json').then(r=>r.json())); } catch { renderAll(); }
+}
+async function boot(){
+  renderAll();
+  await initMap();
+  gPins=svg.append('g'); drawPins();
+  try { await loadTrees(); }
+  catch { useSeedFallback("Can't reach the tree database right now, so this is the starter list only. New trees can't be added until it's back."); }
+  setInterval(()=>{ if (!document.hidden && $('#sheet').hidden && !picking) loadTrees().catch(()=>{}); }, 120000);
+}
+boot();
+})();
+</script>
+</body>
+</html>
