@@ -268,7 +268,7 @@ form.add{display:grid;gap:0;margin-top:14px}
     <div id="modeNote"></div>
     <div class="tblwrap">
       <table class="idx">
-        <thead><tr><th>Code</th><th>Place</th><th>Kind</th><th class="hide-m">Fruit</th><th class="hide-m">Seen</th><th>Grid / area</th></tr></thead>
+        <thead><tr><th>Code</th><th>Place</th><th>Kind</th><th class="hide-m">Fruit</th><th class="hide-m">Seen</th><th>Area</th></tr></thead>
         <tbody id="list"></tbody>
       </table>
     </div>
@@ -437,6 +437,14 @@ async function loadGaz(){
     MAP.areaIndex = g.map(([name,x,y,cls])=>({name, lat:y/1e5, lng:x/1e5, cls})).concat(MAP.boroughs.map(b=>({name:b.name, lat:unpy(b.y), lng:unpx(b.x), cls:1})));
   }).catch(()=>{ MAP.areaIndex = MAP.labels.map(l=>({name:l.name, lat:l.lat, lng:l.lng, cls:l.cls})); });
 }
+// Plain-English area: the London borough, or the nearest town elsewhere.
+function areaOf(t){
+  if (t._area) return t._area;
+  const b = MAP.boroughs.find(b => b.polys && b.polys.some(r => d3.polygonContains(r, [t._x, t._y])));
+  if (b) return t._area = b.name==='City of London' ? 'City of London' : `${b.name}, London`;
+  const town = nearTown(t.lat, t.lng);
+  return t._area = town ? `Near ${town}` : (t.region || 'UK');
+}
 function nearTown(lat, lng){
   let best=null, bd=Infinity; const c=Math.cos(lat*R2D);
   for (const l of MAP.labels){ if (l.cls>1) continue; const d=(l.lat-lat)**2+((l.lng-lng)*c)**2; if (d<bd){ bd=d; best=l.name; } }
@@ -456,9 +464,10 @@ async function initMap(){
   MAP.boroughPath=new Path2D();
   for (const [ni, ...rings] of base.boroughs){
     let big=null;
-    for (const r of rings){ const pts=decodePts(r); addToPath(MAP.boroughPath, pts, true); if (!big || pts.length>big.length) big=pts; }
+    const polys=[];
+    for (const r of rings){ const pts=decodePts(r); addToPath(MAP.boroughPath, pts, true); if (!big || pts.length>big.length) big=pts; const ring=[]; for (let i=0;i<pts.length;i+=2) ring.push([pts[i],pts[i+1]]); polys.push(ring); }
     const arr=[]; for (let i=0;i<big.length;i+=2) arr.push([big[i],big[i+1]]);
-    const [cx,cy]=d3.polygonCentroid(arr); MAP.boroughs.push({name:base.names[ni], x:cx, y:cy});
+    const [cx,cy]=d3.polygonCentroid(arr); MAP.boroughs.push({name:base.names[ni], x:cx, y:cy, polys});
   }
   ingest(base);
   MAP.uk = base.uk.map(([r,name,x,y])=>({r, name, x:px(x/1e5), y:py(y/1e5)}));
@@ -655,7 +664,7 @@ let pinScreen=[];
 function visibleTrees(){
   const q=state.q.trim().toLowerCase();
   return state.trees.filter(t => (!state.filter.size || state.filter.has(t.species)) &&
-    (!q || [t.place,t.region,t.variety,t.notes,SP[t.species].n,codeOf(t)].join(' ').toLowerCase().includes(q)));
+    (!q || [t.place,t.region,t.variety,t.notes,SP[t.species].n,codeOf(t),MAP.ready?areaOf(t):''].join(' ').toLowerCase().includes(q)));
 }
 function drawPins(){
   if (!gPins) return;
@@ -728,11 +737,11 @@ function renderList(){
     const s=SP[t.species], fr=t.fruiting==='yes'?'<span class="yes">Fruiting</span>':(t.fruiting==='flowers'?'Flowering':'<span class="m">—</span>');
     return `<tr data-id="${esc(t.id)}" class="${t.id===state.sel?'sel':''}" tabindex="0">
       <td class="code">${codeOf(t)}</td>
-      <td><span class="pl">${esc(t.place)}</span>${t.region&&t.region!=='London'?`<span class="m">, ${esc(t.region)}</span>`:''}</td>
+      <td><span class="pl">${esc(t.place)}</span></td>
       <td><span class="sw-inline" style="background:${s.c}"></span>${s.n}</td>
       <td class="hide-m">${fr}</td>
       <td class="num hide-m">${fmtDate(t.seen)}</td>
-      <td class="num">${gridRef(t.lat,t.lng)||`<span class="m">${esc(nearTown(t.lat,t.lng)||'UK')}</span>`}</td></tr>`;
+      <td>${esc(areaOf(t))}</td></tr>`;
   }).join('') : `<tr><td colspan="6" class="m" style="padding:18px 0">${state.mode==='loading'?'Loading trees…':state.trees.length?'Nothing matches. Clear the search or show all kinds.':'No trees yet. Add the first one.'}</td></tr>`;
   renderAreas();
 }
@@ -770,7 +779,8 @@ async function renderDetail(){
     <div class="row"><span class="v${t.fruiting==='yes'?' yes':''}">${FRUIT[t.fruiting]||'Not sure'}</span><span class="k">Fruit</span></div>
     <div class="row"><span class="v">${SETTING_LABEL[t.setting]||'—'}</span><span class="k">Growing</span></div>
     <div class="row"><span class="v">${fmtDate(t.seen)}</span><span class="k">Last seen</span></div>
-    <div class="row"><span class="v">${t.lat.toFixed(5)}, ${t.lng.toFixed(5)}${t.approx?' <span class="approx">approx.</span>':''}</span><span class="k">${ref?'Grid '+ref:esc(t.region||('Near '+(nearTown(t.lat,t.lng)||'UK')))}</span></div>
+    <div class="row"><span class="v">${t.lat.toFixed(5)}, ${t.lng.toFixed(5)}${t.approx?' <span class="approx">approx.</span>':''}</span><span class="k">Location</span></div>
+    <div class="row"><span class="v">${esc(areaOf(t))}${ref?` <span class="approx">· map square ${ref}</span>`:''}</span><span class="k">Area</span></div>
     ${t.notes?`<p class="desc">${esc(t.notes)}</p>`:''}
     <div class="row"><span class="v" id="addedBy">${t.seed?'Starter record':'A visitor'}</span><span class="k">Recorded by</span></div>
     <div class="row"><span class="v">${codeOf(t)}</span><span class="k">Code</span></div>
