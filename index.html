@@ -67,6 +67,8 @@ nav.links a:hover,nav.links button:hover{text-decoration:underline;text-underlin
 .hero h1{font-weight:300;font-size:clamp(46px,7.4vw,112px);line-height:.95;letter-spacing:-.045em;margin:0;text-wrap:balance}
 .hero h1 span{color:var(--muted)}
 .hero p{margin:16px 0 0;max-width:56ch;font-size:16px;color:var(--ink-2)}
+.hero p+p{margin-top:10px}
+.hero p strong{color:var(--ink);font-weight:700}
 
 .stage{display:grid;grid-template-columns:minmax(0,1fr) clamp(320px,30vw,430px);gap:clamp(16px,2.4vw,36px);align-items:start}
 .mapwrap{position:relative;height:min(76vh,860px);min-height:420px;background:var(--m-sea);overflow:hidden}
@@ -215,8 +217,9 @@ form.add{display:grid;gap:0;margin-top:14px}
   </header>
 
   <section class="hero" id="top">
-    <h1>Citrus Trees <span>Spotted Outdoors</span></h1>
-    <p>Lemons, oranges, limes and grapefruit are quietly getting through winters outdoors in London and beyond. Nobody knows how many there are, so this map only knows what people add. Spotted one in a park, a front garden or your own back garden? Put it on the map.</p>
+    <h1>Outdoor <span>Citrus</span></h1>
+    <p>Lemons, limes, oranges and grapefruit are not only surviving, but thriving through winters outdoors in London and beyond. Nobody knows how many there are, but we are adding as many as we can find to this map.</p>
+    <p><strong>Spotted one in a park, a front garden or your own back garden? Put it on the map.</strong></p>
   </section>
 
   <div class="stage">
