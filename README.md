@@ -11,9 +11,15 @@ A crowd-sourced map for finding lemon, orange, lime, grapefruit and other citrus
 - `map/` holds the basemap: `england.json` (overview, motorways, towns), `m/*.bin` (regional tiles: A-roads, rail, coastline, parks) and `d/*.bin` (street tiles). `places.json` powers the area search.
 - `tools/` has the scripts that build the map tiles from OpenStreetMap data (`extract.sh` then `build_eng.py`).
 
+## Legal and safety
+
+- `privacy.html` is the privacy notice, terms of use and the report / removal form (writes to the `reports` table; run `supabase-update-reports.sql` once to create it).
+- `docs/online-safety-assessment.md` is the Online Safety Act illegal-content risk assessment and children's access assessment. Review it yearly.
+- Fonts are self-hosted in `fonts/` (SIL Open Font Licence) so visitors' details aren't sent to Google.
+
 ## Moderation
 
-To hide a tree, open Supabase > Table Editor > `trees` and tick `hidden`. To delete one, delete the row (and its photo under Storage > `photos`).
+Check Supabase > Table Editor > `reports` for new reports and tick `resolved` once dealt with. To hide a tree, open `trees` and tick `hidden`. To delete one, delete the row (and its photo under Storage > `photos`).
 
 ## Credits and licences
 

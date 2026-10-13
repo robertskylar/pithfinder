@@ -17,9 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23111111'/%3E%3Ccircle cx='50' cy='50' r='28' fill='%23FF9F1A'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@200;300;400;500;600;700;800;900&family=Jost:wght@400;500&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 :root{
   --bg:#FFFFFF; --ink:#111111; --ink-2:#3C3C3C; --muted:#8A8A86; --rule:#E3E3E0; --rule-2:#C9C9C5; --tint:#F4F4F2; --sel:#FFF4E2;
@@ -202,6 +200,8 @@ form.add{display:grid;gap:0;margin-top:14px}
 .locstate{font-size:14px;font-weight:600}
 .locstate.ok{color:var(--leaf)}
 .err{color:var(--alert);font-size:14px;font-weight:700;min-height:1px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.4;border-top:1px solid var(--rule);padding-top:14px;cursor:pointer}
+.consent input{margin-top:3px;flex:none;width:16px;height:16px;accent-color:var(--ink)}
 .copybox{width:100%;min-height:170px;font:500 13px var(--font);border:1px solid var(--rule-2);padding:10px;background:var(--bg)}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;font-weight:700;font-size:14px;z-index:60;max-width:calc(100% - 32px)}
 
@@ -253,7 +253,7 @@ form.add{display:grid;gap:0;margin-top:14px}
         <div class="keyhead"><b>Key</b><button type="button" id="showAll" hidden>Show all</button></div>
         <div class="key" id="key" role="group" aria-label="Filter by kind of citrus"></div>
         <button class="cta" type="button" id="addBtn"><span>Add a tree</span><small>Photo · Pin · Done</small></button>
-        <div class="fine">Any tree counts, including ones in back gardens. For private gardens, keep the pin at street level and leave out house numbers.</div>
+        <div class="fine">Any tree counts, including ones in back gardens. For private gardens, keep the pin at street level and leave out house numbers. Please don't go onto private property or pick fruit without the owner's permission.</div>
       </div>
       <div id="detail" hidden></div>
     </aside>
@@ -277,6 +277,7 @@ form.add{display:grid;gap:0;margin-top:14px}
   <footer>
     <div>Starter records from <a href="https://www.homecitrusgrowers.co.uk/citrusplaces/londonoutdoorcitrus.html" target="_blank" rel="noopener">Home Citrus Growers</a>, <a href="https://thestreettree.substack.com/p/99-shoreditch-lemon" target="_blank" rel="noopener">The Street Tree</a> and Wandsworth Council. Trees in private gardens are placed at street level.</div>
     <div>Map data © OpenStreetMap contributors (ODbL), land polygons from osmdata.openstreetmap.de. Boroughs: ONS (OGL). Coastline: Natural Earth.</div>
+    <div><a href="privacy.html">Privacy &amp; terms</a> · <a href="privacy.html#report">Report a problem or ask for a removal</a></div>
     <div>No cookies. Visits are counted anonymously with Cloudflare Web Analytics, which does not track you across other sites. Your location is only used on your device to show you on the map, and is only saved if you add a tree there. Trees you add are public.</div>
   </footer>
 </div>
@@ -303,6 +304,8 @@ form.add{display:grid;gap:0;margin-top:14px}
         <div class="f"><span class="lab">Where is it growing? <em>Private space = courtyards, offices, schools, anywhere not open to the public</em></span><div class="opts" id="fSetting"></div></div>
         <div class="f"><span class="lab">Fruit</span><div class="opts" id="fFruit"></div></div>
         <div class="f"><label class="lab" for="fNotes">Notes <em>Optional</em></label><textarea id="fNotes" maxlength="600" placeholder="Size, how sheltered it is, whether it gets covered in winter"></textarea></div>
+        <label class="consent"><input type="checkbox" id="fConsent"> <span>Any photo I've added is mine or I have permission to share it, and it doesn't show anyone's face, a house number or a number plate. I agree to the <a href="privacy.html#terms" target="_blank" rel="noopener">terms</a>.</span></label>
+        <div class="hint">Please don't go onto private property or pick fruit without the owner's permission.</div>
         <div class="err" id="formErr" aria-live="polite"></div>
         <button class="cta" type="submit" id="submitAdd"><span>Add to the map</span><small>Saves for everyone</small></button>
       </form>
@@ -789,6 +792,7 @@ async function renderDetail(){
       <button type="button" id="copyLoc">Copy coordinates</button>
       <a href="https://www.google.com/maps/@?api=1&map_action=map&center=${t.lat.toFixed(5)},${t.lng.toFixed(5)}&zoom=20&basemap=satellite" target="_blank" rel="noopener">Satellite view</a>
       <a href="https://www.google.com/maps/search/?api=1&query=${t.lat.toFixed(5)},${t.lng.toFixed(5)}" target="_blank" rel="noopener">Directions</a>
+      <a href="privacy.html?tree=${encodeURIComponent(t.id)}#report">Report this tree</a>
     </div>
 `;
   $('#overview').hidden=true; el.hidden=false;
@@ -910,6 +914,7 @@ $('#addForm').addEventListener('submit', async e=>{
   if (!rec.species){ err.textContent="Choose what kind it is. Pick 'Not sure yet' if you don't know."; return; }
   if (!rec.place){ err.textContent='Add the street and area so people know where to look.'; $('#fPlace').focus(); return; }
   if (!draft){ err.textContent='Drop the pin: pick on the map, paste a link, or use a photo with location.'; return; }
+  if (!$('#fConsent').checked){ err.textContent='Please tick the box to confirm the photo and terms.'; return; }
   rec.lat=draft.lat; rec.lng=draft.lng; err.textContent='';
   if (!sb || state.mode!=='db'){ err.textContent="Can't reach the tree database right now, so nothing can be saved. Try again later."; return; }
   const btn=$('#submitAdd'); btn.disabled=true; btn.querySelector('span').textContent='Saving…';

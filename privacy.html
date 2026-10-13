@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy &amp; terms · pithfinder</title>
+<meta name="description" content="How pithfinder handles information, the rules for adding trees, and how to report a problem or ask for something to be removed.">
+<meta name="theme-color" content="#FF9F1A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23111111'/%3E%3Ccircle cx='50' cy='50' r='28' fill='%23FF9F1A'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{--bg:#FFFFFF;--ink:#111111;--ink-2:#3C3C3C;--muted:#8A8A86;--rule:#E3E3E0;--rule-2:#C9C9C5;--tint:#F4F4F2;--gf:#FF9F1A;--leaf:#2F8A4A;--alert:#D1342F;--font:"Hanken Grotesk","Helvetica Neue",Helvetica,Arial,sans-serif}
+@media (prefers-color-scheme: dark){:root{color-scheme:dark;--bg:#0B0B0B;--ink:#F1F1EF;--ink-2:#CFCFCB;--muted:#8E8E89;--rule:#262626;--rule-2:#3A3A3A;--tint:#161616;--gf:#FFAE3D;--leaf:#6CC487;--alert:#FF7A72}}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.wrap{padding-inline:clamp(16px,3.4vw,44px);max-width:1100px;margin:0 auto;padding-bottom:60px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:18px 6px}
+.wm{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink)}
+.wm svg{width:48px;height:48px;flex:none}
+.wm .name{font-family:"Jost",Futura,"Helvetica Neue",sans-serif;font-weight:400;font-size:26px;letter-spacing:.28em;line-height:1;padding-top:3px}
+nav.links a{font-weight:700;text-decoration:none}
+nav.links a:hover{text-decoration:underline}
+h1{font-weight:300;font-size:clamp(42px,6vw,84px);line-height:.95;letter-spacing:-.045em;margin:28px 0 10px}
+h1 span{color:var(--muted)}
+.updated{color:var(--muted);font-size:14px;margin:0 0 30px}
+.toc{display:flex;flex-wrap:wrap;gap:8px 22px;font-weight:700;font-size:15px;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);padding:12px 0;margin-bottom:10px}
+section{display:grid;grid-template-columns:minmax(160px,240px) minmax(0,1fr);gap:12px 40px;border-bottom:1px solid var(--rule);padding:28px 0}
+section h2{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:4px 0 0}
+section .body{max-width:66ch}
+section .body h3{font-size:17px;margin:18px 0 4px}
+section .body h3:first-child{margin-top:0}
+section .body p{margin:0 0 12px}
+section .body ul{margin:0 0 12px;padding-left:20px}
+section .body li{margin-bottom:4px}
+form{display:grid;gap:14px;max-width:560px}
+label.lab{display:grid;gap:6px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+label.lab em{font-style:normal;text-transform:none;letter-spacing:0}
+select,textarea,input[type=text]{font:inherit;color:inherit;width:100%;border:0;border-bottom:1px solid var(--rule-2);background:transparent;padding:8px 0;font-size:16px;font-weight:500;border-radius:0;text-transform:none;letter-spacing:0}
+select{border:1px solid var(--rule-2);padding:8px 10px;background:var(--bg)}
+textarea{min-height:110px;resize:vertical}
+select:focus,textarea:focus,input:focus{outline:none;border-color:var(--ink)}
+.treebox{background:var(--tint);padding:10px 12px;font-size:15px}
+.cta{display:flex;justify-content:space-between;align-items:center;width:100%;background:var(--gf);color:#111;border:0;padding:14px;font:inherit;font-weight:700;font-size:15px;cursor:pointer}
+.cta:disabled{opacity:.6}
+.msg{font-weight:700}
+.msg.ok{color:var(--leaf)}
+.msg.err{color:var(--alert)}
+@media (max-width:720px){section{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="wm" href="./" aria-label="pithfinder home"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46.5" fill="none" stroke="var(--gf)" stroke-width="4"/><circle cx="50" cy="50" r="40.5" fill="none" stroke="currentColor" stroke-width="1.6"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line x1="50" y1="43.7" x2="50" y2="11"/><line x1="53.7" y1="44.9" x2="72.9" y2="18.4"/><line x1="56" y1="48.1" x2="87.1" y2="38"/><line x1="56" y1="51.9" x2="87.1" y2="62"/><line x1="53.7" y1="55.1" x2="72.9" y2="81.6"/><line x1="50" y1="56.3" x2="50" y2="89"/><line x1="46.3" y1="55.1" x2="27.1" y2="81.6"/><line x1="44" y1="51.9" x2="12.9" y2="62"/><line x1="44" y1="48.1" x2="12.9" y2="38"/><line x1="46.3" y1="44.9" x2="27.1" y2="18.4"/></g><circle cx="50" cy="50" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span class="name">PITHFINDER</span></a>
+    <nav class="links"><a href="./">Back to the map</a></nav>
+  </header>
+
+  <h1>Privacy <span>&amp; Terms</span></h1>
+  <p class="updated">Last updated 13 October 2026</p>
+  <div class="toc"><a href="#privacy">Privacy</a><a href="#terms">Terms of use</a><a href="#report">Report or ask for a removal</a></div>
+
+  <section id="privacy">
+    <h2>Privacy</h2>
+    <div class="body">
+      <h3>Who runs pithfinder</h3>
+      <p>pithfinder is an independent citizen-science project, run by one person in London. That person decides how the information on this site is used. To get in touch, use the form at the bottom of this page.</p>
+
+      <h3>What we collect</h3>
+      <ul>
+        <li><strong>Trees you add:</strong> the kind of tree, the street and area you type, the pin's location, the date you saw it, your notes and any photo. These are published on the map for everyone to see.</li>
+        <li><strong>Reports and requests</strong> you send with the form below, including a way to reply to you if you choose to give one.</li>
+        <li><strong>Visit counts:</strong> we use Cloudflare Web Analytics, which counts visits without cookies and without identifying you or following you across other websites.</li>
+        <li><strong>Technical logs:</strong> the companies that host the site (see below) briefly log IP addresses to keep their services running and secure.</li>
+      </ul>
+      <p>We don't ask for your name, email or an account to add a tree, and we don't use cookies.</p>
+
+      <h3>Your location</h3>
+      <p>"Locate me" and "Use where I'm standing" use your device's location to show you on the map. That location stays on your device. It is only saved if you add a tree at that spot, and then only as the tree's pin.</p>
+
+      <h3>Trees in private gardens</h3>
+      <p>A pin in a private garden could point to someone's home. We ask everyone to place those pins at street level, leave out house numbers, and avoid photos of people, house numbers or number plates. If a tree on the map points to your home and you'd like it moved or removed, use the form below and we'll act on it.</p>
+
+      <h3>Why we use this information</h3>
+      <p>To run a public map of citrus trees growing outdoors, to keep it accurate and safe, and to understand how many people use it. The legal basis is our legitimate interest in running this project. We think that is fair because the information is limited, published by the people who add it, and removable on request.</p>
+
+      <h3>Who else handles it</h3>
+      <ul>
+        <li><strong>GitHub</strong> (GitHub Pages) hosts the website.</li>
+        <li><strong>Supabase</strong> stores the trees, photos and reports.</li>
+        <li><strong>Cloudflare</strong> provides the anonymous visit counts.</li>
+      </ul>
+      <p>These companies only process the information to provide their services to us. Some are based in the United States and protect data transferred there using UK-approved safeguards. We never sell information.</p>
+
+      <h3>How long we keep it</h3>
+      <p>Trees stay on the map until they're removed. Reports are deleted within three months of being dealt with. Hosting providers keep their logs for short periods under their own policies.</p>
+
+      <h3>Your rights</h3>
+      <p>You can ask to see, correct or delete information about you, or object to how it's used. Use the form below. If you're unhappy with how we handle your request, you can complain to the Information Commissioner's Office at <a href="https://ico.org.uk/make-a-complaint/" target="_blank" rel="noopener">ico.org.uk/make-a-complaint</a>.</p>
+    </div>
+  </section>
+
+  <section id="terms">
+    <h2>Terms of use</h2>
+    <div class="body">
+      <h3>Adding a tree</h3>
+      <p>When you add a tree, you confirm that what you've added is accurate as far as you know, and that any photo is yours or you have permission to share it. You keep the rights to your photo, and you allow pithfinder to display, copy and share it as part of the map, without payment. We can edit or remove anything that's added.</p>
+
+      <h3>Please don't add</h3>
+      <ul>
+        <li>photos where people can be recognised, or that show house numbers or number plates</li>
+        <li>house numbers or other details that pinpoint someone's home</li>
+        <li>anything illegal, abusive, hateful, sexual or misleading</li>
+        <li>adverts, spam or trees that don't exist</li>
+      </ul>
+
+      <h3>Be a good neighbour</h3>
+      <p>Look from the street. Don't go onto private property, and don't pick fruit without the owner's permission. Taking fruit from someone's tree without permission can be theft. Take care near roads.</p>
+
+      <h3>No guarantees</h3>
+      <p>Trees are added by the public and may be wrong, moved or gone. The map is provided as it is, for interest only.</p>
+
+      <h3>Problems</h3>
+      <p>Use the form below to report anything that breaks these terms or the law. We review reports promptly and remove content that is illegal or breaks these terms.</p>
+
+      <h3>Changes</h3>
+      <p>We may update these terms and this privacy notice. The date at the top shows when they last changed. These terms are governed by the law of England and Wales.</p>
+
+      <h3>Credits</h3>
+      <p>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, available under the Open Database Licence. Fonts: Hanken Grotesk and Jost, under the SIL Open Font Licence.</p>
+    </div>
+  </section>
+
+  <section id="report">
+    <h2>Report or ask for a removal</h2>
+    <div class="body">
+      <p>Use this form to report a tree or photo, ask for something to be removed, or exercise your privacy rights.</p>
+      <form id="reportForm" novalidate>
+        <div class="treebox" id="treeBox" hidden></div>
+        <label class="lab" for="kind">What's this about?
+          <select id="kind">
+            <option value="">Choose one</option>
+            <option value="privacy">It shows my home, me or something private</option>
+            <option value="removal">Please remove a tree or photo</option>
+            <option value="inappropriate">Inappropriate or illegal content</option>
+            <option value="wrong">The information is wrong</option>
+            <option value="other">Something else, or a question</option>
+          </select>
+        </label>
+        <label class="lab" for="message">Details
+          <textarea id="message" maxlength="1000" placeholder="Which tree, and what's wrong? A street name or the tree's code (like GF-003) helps."></textarea>
+        </label>
+        <label class="lab" for="contact">How can we reply? <em>Optional: an email or phone number, only used to reply to you</em>
+          <input type="text" id="contact" maxlength="200" autocomplete="email">
+        </label>
+        <div class="msg" id="msg" role="status" aria-live="polite"></div>
+        <button class="cta" type="submit" id="send"><span>Send</span><span>→</span></button>
+      </form>
+    </div>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+<script>
+(function(){
+  const sb = window.supabase ? window.supabase.createClient('https://prxcmdvrvsvaqyefxeyo.supabase.co', 'sb_publishable_XcB2e2sYuNd1uA3RtMTSDA_QCUy6cLd', {auth:{persistSession:false, autoRefreshToken:false}}) : null;
+  const $ = s => document.querySelector(s);
+  const treeId = new URLSearchParams(location.search).get('tree');
+  const validId = treeId && /^[0-9a-f-]{36}$/i.test(treeId) ? treeId : null;
+  if (validId && sb){
+    sb.from('trees').select('place,species').eq('id', validId).maybeSingle().then(({data}) => {
+      if (!data) return;
+      const box = $('#treeBox'); box.hidden = false;
+      box.textContent = 'Reporting: ' + data.place;
+    });
+  }
+  $('#reportForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const msg = $('#msg'), kind = $('#kind').value, message = $('#message').value.trim(), contact = $('#contact').value.trim();
+    msg.className = 'msg err';
+    if (!kind){ msg.textContent = 'Choose what this is about.'; return; }
+    if (!message && !validId){ msg.textContent = 'Add a few details so we know which tree you mean.'; return; }
+    if (!sb){ msg.textContent = "Can't send right now. Please try again later."; return; }
+    const btn = $('#send'); btn.disabled = true;
+    const {error} = await sb.from('reports').insert({tree_id: validId, kind, message: message || null, contact: contact || null});
+    btn.disabled = false;
+    if (error){ msg.textContent = /Too many/i.test(error.message||'') ? 'Lots of reports have come in just now. Please try again in an hour.' : "Couldn't send just now. Check your connection and try again."; return; }
+    e.target.reset(); msg.className = 'msg ok'; msg.textContent = 'Thanks, your message has been sent. We review reports promptly.';
+  });
+})();
+</script>
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "e8bcb58bec6e4c14aef222a5612c1e9e"}'></script>
+</body>
+</html>
