@@ -8,8 +8,8 @@ A crowd-sourced map for finding lemon, orange, lime, grapefruit and other citrus
 
 - `index.html` is the whole app: a canvas street map, the tree list, and the add-a-tree form.
 - Trees and photos are stored in [Supabase](https://supabase.com). Run `supabase-setup.sql` once in the Supabase SQL Editor to create the table, photo storage and access rules (anyone can view and add; only the owner can edit or delete, from the Supabase dashboard).
-- `map/` holds the basemap: `england.json` (overview, motorways, towns), `m/*.bin` (regional tiles: A-roads, rail, coastline, parks) and `d/*.bin` (street tiles). `places.json` powers the area search.
-- `tools/` has the scripts that build the map tiles from OpenStreetMap data (`extract.sh` then `build_eng.py`).
+- `map/uk/` holds the basemap for the whole UK: `uk.json` (overview, motorways, towns), `m/*.bin` (regional tiles: A-roads, rail, coastline, parks) and `d/*.bin` (street tiles). `places.json` powers the area search.
+- `tools/` has the scripts that build the map tiles from OpenStreetMap data (`run_uk.sh` runs `extract_map.sh` then `build_map.py`).
 
 ## Legal and safety
 

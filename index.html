@@ -436,7 +436,7 @@ function decodeBin(buf, leaf){
 }
 async function loadGaz(){
   if (loadGaz.p) return loadGaz.p;
-  return loadGaz.p = fetch('map/places.json').then(r=>r.json()).then(g=>{
+  return loadGaz.p = fetch('map/uk/places.json').then(r=>r.json()).then(g=>{
     MAP.areaIndex = g.map(([name,x,y,cls])=>({name, lat:y/1e5, lng:x/1e5, cls})).concat(MAP.boroughs.map(b=>({name:b.name, lat:unpy(b.y), lng:unpx(b.x), cls:1})));
   }).catch(()=>{ MAP.areaIndex = MAP.labels.map(l=>({name:l.name, lat:l.lat, lng:l.lng, cls:l.cls})); });
 }
@@ -456,7 +456,7 @@ function nearTown(lat, lng){
 async function initMap(){
   cv=$('#mapcv'); ctx=cv.getContext('2d'); svg=d3.select('#mapsvg');
   readColors();
-  const base = await fetch('map/england.json').then(r=>r.json());
+  const base = await fetch('map/uk/uk.json').then(r=>r.json());
   const box = $('#mapwrap').getBoundingClientRect();
   const W=Math.max(box.width,300), H=Math.max(box.height,300);
   const london = {type:'Polygon', coordinates: base.london.map(r=>{ const o=[]; let X=0,Y=0; for(let i=0;i<r.length;i+=2){X+=r[i];Y+=r[i+1];o.push([X/1e5,Y/1e5]);} return o; })};
@@ -518,7 +518,7 @@ function ensureLeaves(layer, vb){
   for (const L of want){
     if (MAP.loading.size>=6) break;
     const key=layer+L.id; MAP.loading.add(key);
-    fetch(`map/${layer}/${L.id}.bin`).then(r=>{ if (!r.ok) throw 0; return r.arrayBuffer(); })
+    fetch(`map/uk/${layer}/${L.id}.bin`).then(r=>{ if (!r.ok) throw 0; return r.arrayBuffer(); })
       .then(b=>{ decodeBin(b, L); MAP.loaded.add(key); })
       .catch(()=>{ L.flag=0; L.failed=true; })
       .finally(()=>{ MAP.loading.delete(key); schedule(); });
